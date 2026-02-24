@@ -1,0 +1,6 @@
+streamlit
+pandas
+plotly
+sqlalchemy
+Pillow
+streamlit-cookies-manager
