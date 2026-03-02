@@ -1,20 +1,15 @@
 import streamlit as st
-import sqlite3
-from datetime import date, datetime
+from sqlalchemy import create_engine, text
 import os
+from dotenv import load_dotenv
+from datetime import date, datetime
+
+load_dotenv()
+DATABASE_URL = os.getenv("DATABASE_URL")
 
 def crear_conexion():
-    base_dir = os.path.dirname(os.path.abspath(__file__))
-    db_path = os.path.join(base_dir, "..", "hellyeah.db")
-    conn = sqlite3.connect(db_path)
-    return conn
-
-def formatear_fecha(fecha_str):
-    try:
-        fecha = datetime.strptime(fecha_str, "%Y-%m-%d")
-        return fecha.strftime("%d/%m/%Y")
-    except:
-        return fecha_str
+    engine = create_engine(DATABASE_URL)
+    return engine
 
 def mostrar_proyectos():
     st.title("📁 Proyectos y Tareas")
@@ -23,16 +18,16 @@ def mostrar_proyectos():
     tab1, tab2 = st.tabs(["📋 Lista de Proyectos", "➕ Agregar Proyecto"])
 
     with tab1:
-        conn = crear_conexion()
-        cursor = conn.cursor()
-        cursor.execute("""
-            SELECT p.id, p.nombre, c.nombre, c.empresa, p.estado, 
-                   p.fecha_inicio, p.fecha_entrega, p.presupuesto, p.descripcion
-            FROM proyectos p
-            LEFT JOIN clientes c ON p.cliente_id = c.id
-        """)
-        proyectos = cursor.fetchall()
-        conn.close()
+        engine = crear_conexion()
+        with engine.connect() as conn:
+            result = conn.execute(text("""
+                SELECT p.id, p.nombre, c.nombre, c.empresa, p.estado,
+                       p.fecha_inicio, p.fecha_entrega, p.presupuesto, p.descripcion
+                FROM proyectos p
+                LEFT JOIN clientes c ON p.cliente_id = c.id
+                ORDER BY p.id DESC
+            """))
+            proyectos = result.fetchall()
 
         if len(proyectos) == 0:
             st.info("No hay proyectos registrados todavía.")
@@ -52,16 +47,17 @@ def mostrar_proyectos():
                         st.write(f"**Estado:** {proyecto[4]}")
                         st.write(f"**Descripción:** {proyecto[8]}")
                     with col2:
-                        st.write(f"**Fecha inicio:** {formatear_fecha(proyecto[5])}")
-                        st.write(f"**Fecha entrega:** {formatear_fecha(proyecto[6])}")
+                        st.write(f"**Fecha inicio:** {proyecto[5]}")
+                        st.write(f"**Fecha entrega:** {proyecto[6]}")
                         st.write(f"**Presupuesto:** ${proyecto[7]:,.2f}")
 
                     st.markdown("#### ✅ Tareas de este proyecto")
-                    conn = crear_conexion()
-                    cursor = conn.cursor()
-                    cursor.execute("SELECT * FROM tareas WHERE proyecto_id = ?", (proyecto[0],))
-                    tareas = cursor.fetchall()
-                    conn.close()
+                    engine = crear_conexion()
+                    with engine.connect() as conn:
+                        result = conn.execute(text("""
+                            SELECT * FROM tareas WHERE proyecto_id = :id
+                        """), {"id": proyecto[0]})
+                        tareas = result.fetchall()
 
                     if len(tareas) == 0:
                         st.info("Este proyecto no tiene tareas todavía.")
@@ -91,19 +87,19 @@ def mostrar_proyectos():
                                     key=f"estado_tarea_{tarea[0]}"
                                 )
                                 if nuevo_estado != tarea[4]:
-                                    conn = crear_conexion()
-                                    cursor = conn.cursor()
-                                    cursor.execute("UPDATE tareas SET estado = ? WHERE id = ?", (nuevo_estado, tarea[0]))
-                                    conn.commit()
-                                    conn.close()
+                                    engine = crear_conexion()
+                                    with engine.connect() as conn:
+                                        conn.execute(text("""
+                                            UPDATE tareas SET estado=:estado WHERE id=:id
+                                        """), {"estado": nuevo_estado, "id": tarea[0]})
+                                        conn.commit()
                                     st.rerun()
                             with col_t5:
                                 if st.button("🗑️", key=f"del_tarea_{tarea[0]}"):
-                                    conn = crear_conexion()
-                                    cursor = conn.cursor()
-                                    cursor.execute("DELETE FROM tareas WHERE id = ?", (tarea[0],))
-                                    conn.commit()
-                                    conn.close()
+                                    engine = crear_conexion()
+                                    with engine.connect() as conn:
+                                        conn.execute(text("DELETE FROM tareas WHERE id=:id"), {"id": tarea[0]})
+                                        conn.commit()
                                     st.rerun()
 
                     st.markdown("---")
@@ -115,23 +111,9 @@ def mostrar_proyectos():
                             nombre_tarea = st.text_input("Nombre de la tarea *", placeholder="Ej: Diseñar publicaciones")
                             responsable = st.text_input("Responsable", placeholder="Ej: María López")
                         with col2:
-                            estado_tarea = st.selectbox(
-                                "Estado",
-                                options=["Pendiente", "En Proceso", "Completada"],
-                                index=0,
-                                key=f"est_{proyecto[0]}"
-                            )
-                            prioridad = st.selectbox(
-                                "Prioridad",
-                                options=["Baja", "Media", "Alta"],
-                                index=0,
-                                key=f"pri_{proyecto[0]}"
-                            )
-                            fecha_limite = st.date_input(
-                                "Fecha límite",
-                                value=date.today(),
-                                key=f"fec_{proyecto[0]}"
-                            )
+                            estado_tarea = st.selectbox("Estado", options=["Pendiente", "En Proceso", "Completada"], index=0, key=f"est_{proyecto[0]}")
+                            prioridad = st.selectbox("Prioridad", options=["Baja", "Media", "Alta"], index=0, key=f"pri_{proyecto[0]}")
+                            fecha_limite = st.date_input("Fecha límite", value=date.today(), key=f"fec_{proyecto[0]}")
 
                         guardar_tarea = st.form_submit_button("💾 Guardar Tarea", use_container_width=True)
 
@@ -139,14 +121,20 @@ def mostrar_proyectos():
                             if nombre_tarea == "":
                                 st.error("⚠️ El nombre de la tarea es obligatorio.")
                             else:
-                                conn = crear_conexion()
-                                cursor = conn.cursor()
-                                cursor.execute("""
-                                    INSERT INTO tareas (proyecto_id, nombre, responsable, estado, prioridad, fecha_limite)
-                                    VALUES (?, ?, ?, ?, ?, ?)
-                                """, (proyecto[0], nombre_tarea, responsable, estado_tarea, prioridad, str(fecha_limite)))
-                                conn.commit()
-                                conn.close()
+                                engine = crear_conexion()
+                                with engine.connect() as conn:
+                                    conn.execute(text("""
+                                        INSERT INTO tareas (proyecto_id, nombre, responsable, estado, prioridad, fecha_limite)
+                                        VALUES (:proyecto_id, :nombre, :responsable, :estado, :prioridad, :fecha_limite)
+                                    """), {
+                                        "proyecto_id": proyecto[0],
+                                        "nombre": nombre_tarea,
+                                        "responsable": responsable,
+                                        "estado": estado_tarea,
+                                        "prioridad": prioridad,
+                                        "fecha_limite": str(fecha_limite)
+                                    })
+                                    conn.commit()
                                 st.success(f"✅ Tarea '{nombre_tarea}' agregada correctamente.")
                                 st.rerun()
 
@@ -159,12 +147,11 @@ def mostrar_proyectos():
 
                     with col_del:
                         if st.button("🗑️ Eliminar Proyecto", key=f"del_proy_{proyecto[0]}"):
-                            conn = crear_conexion()
-                            cursor = conn.cursor()
-                            cursor.execute("DELETE FROM proyectos WHERE id = ?", (proyecto[0],))
-                            cursor.execute("DELETE FROM tareas WHERE proyecto_id = ?", (proyecto[0],))
-                            conn.commit()
-                            conn.close()
+                            engine = crear_conexion()
+                            with engine.connect() as conn:
+                                conn.execute(text("DELETE FROM tareas WHERE proyecto_id=:id"), {"id": proyecto[0]})
+                                conn.execute(text("DELETE FROM proyectos WHERE id=:id"), {"id": proyecto[0]})
+                                conn.commit()
                             st.success("Proyecto eliminado correctamente.")
                             st.rerun()
 
@@ -173,16 +160,13 @@ def mostrar_proyectos():
                             st.markdown("### ✏️ Editar Proyecto")
                             col1, col2 = st.columns(2)
                             with col1:
-                                nuevo_estado_proy = st.selectbox(
-                                    "Estado del proyecto",
-                                    options=["Pendiente", "En Proceso", "Completado"],
-                                    index=["Pendiente", "En Proceso", "Completado"].index(proyecto[4]) if proyecto[4] in ["Pendiente", "En Proceso", "Completado"] else 0
-                                )
+                                nuevo_estado_proy = st.selectbox("Estado", options=["Pendiente", "En Proceso", "Completado"],
+                                    index=["Pendiente", "En Proceso", "Completado"].index(proyecto[4]) if proyecto[4] in ["Pendiente", "En Proceso", "Completado"] else 0)
                                 nueva_descripcion = st.text_area("Descripción", value=proyecto[8] or "")
                             with col2:
                                 nuevo_presupuesto = st.number_input("Presupuesto ($)", value=float(proyecto[7]), min_value=0.0)
-                                nueva_fecha_inicio = st.date_input("Fecha de inicio", value=datetime.strptime(proyecto[5], "%Y-%m-%d").date() if proyecto[5] else date.today())
-                                nueva_fecha_entrega = st.date_input("Fecha de entrega", value=datetime.strptime(proyecto[6], "%Y-%m-%d").date() if proyecto[6] else date.today())
+                                nueva_fecha_inicio = st.date_input("Fecha de inicio", value=proyecto[5] if proyecto[5] else date.today())
+                                nueva_fecha_entrega = st.date_input("Fecha de entrega", value=proyecto[6] if proyecto[6] else date.today())
 
                             col_g, col_c = st.columns(2)
                             with col_g:
@@ -191,16 +175,22 @@ def mostrar_proyectos():
                                 cancelar = st.form_submit_button("❌ Cancelar", use_container_width=True)
 
                             if guardar:
-                                conn = crear_conexion()
-                                cursor = conn.cursor()
-                                cursor.execute("""
-                                    UPDATE proyectos 
-                                    SET estado=?, presupuesto=?, descripcion=?, fecha_inicio=?, fecha_entrega=?
-                                    WHERE id=?
-                                """, (nuevo_estado_proy, nuevo_presupuesto, nueva_descripcion,
-                                      str(nueva_fecha_inicio), str(nueva_fecha_entrega), proyecto[0]))
-                                conn.commit()
-                                conn.close()
+                                engine = crear_conexion()
+                                with engine.connect() as conn:
+                                    conn.execute(text("""
+                                        UPDATE proyectos
+                                        SET estado=:estado, presupuesto=:presupuesto, descripcion=:descripcion,
+                                            fecha_inicio=:fecha_inicio, fecha_entrega=:fecha_entrega
+                                        WHERE id=:id
+                                    """), {
+                                        "estado": nuevo_estado_proy,
+                                        "presupuesto": nuevo_presupuesto,
+                                        "descripcion": nueva_descripcion,
+                                        "fecha_inicio": str(nueva_fecha_inicio),
+                                        "fecha_entrega": str(nueva_fecha_entrega),
+                                        "id": proyecto[0]
+                                    })
+                                    conn.commit()
                                 st.success("✅ Proyecto actualizado correctamente.")
                                 st.session_state[f"editando_proy_{proyecto[0]}"] = False
                                 st.rerun()
@@ -212,11 +202,10 @@ def mostrar_proyectos():
     with tab2:
         st.subheader("➕ Agregar Nuevo Proyecto")
 
-        conn = crear_conexion()
-        cursor = conn.cursor()
-        cursor.execute("SELECT id, nombre, empresa FROM clientes")
-        clientes = cursor.fetchall()
-        conn.close()
+        engine = crear_conexion()
+        with engine.connect() as conn:
+            result = conn.execute(text("SELECT id, nombre, empresa FROM clientes"))
+            clientes = result.fetchall()
 
         if len(clientes) == 0:
             st.warning("⚠️ Primero debes agregar clientes antes de crear proyectos.")
@@ -241,14 +230,20 @@ def mostrar_proyectos():
                 if nombre_proy == "":
                     st.error("⚠️ El nombre del proyecto es obligatorio.")
                 else:
-                    conn = crear_conexion()
-                    cursor = conn.cursor()
-                    cursor.execute("""
-                        INSERT INTO proyectos (nombre, cliente_id, descripcion, estado, fecha_inicio, fecha_entrega, presupuesto)
-                        VALUES (?, ?, ?, ?, ?, ?, ?)
-                    """, (nombre_proy, cliente_opciones[cliente_sel], descripcion, estado,
-                          str(fecha_inicio), str(fecha_entrega), presupuesto))
-                    conn.commit()
-                    conn.close()
+                    engine = crear_conexion()
+                    with engine.connect() as conn:
+                        conn.execute(text("""
+                            INSERT INTO proyectos (nombre, cliente_id, descripcion, estado, fecha_inicio, fecha_entrega, presupuesto)
+                            VALUES (:nombre, :cliente_id, :descripcion, :estado, :fecha_inicio, :fecha_entrega, :presupuesto)
+                        """), {
+                            "nombre": nombre_proy,
+                            "cliente_id": cliente_opciones[cliente_sel],
+                            "descripcion": descripcion,
+                            "estado": estado,
+                            "fecha_inicio": str(fecha_inicio),
+                            "fecha_entrega": str(fecha_entrega),
+                            "presupuesto": presupuesto
+                        })
+                        conn.commit()
                     st.success(f"✅ Proyecto '{nombre_proy}' creado correctamente.")
                     st.balloons()

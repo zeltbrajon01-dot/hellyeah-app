@@ -1,73 +1,66 @@
-import sqlite3
+import os
+from sqlalchemy import create_engine, text
+from dotenv import load_dotenv
+
+load_dotenv()
+
+DATABASE_URL = os.getenv("DATABASE_URL")
 
 def crear_conexion():
-    conn = sqlite3.connect("hellyeah.db")
-    return conn
+    engine = create_engine(DATABASE_URL)
+    return engine
 
-def crear_tablas():
-    conn = crear_conexion()
-    cursor = conn.cursor()
+def inicializar_db():
+    engine = crear_conexion()
+    with engine.connect() as conn:
+        conn.execute(text("""
+            CREATE TABLE IF NOT EXISTS clientes (
+                id SERIAL PRIMARY KEY,
+                nombre VARCHAR(255),
+                empresa VARCHAR(255),
+                email VARCHAR(255),
+                telefono VARCHAR(50),
+                tipo VARCHAR(50),
+                fecha_registro DATE
+            )
+        """))
+        conn.execute(text("""
+            CREATE TABLE IF NOT EXISTS proyectos (
+                id SERIAL PRIMARY KEY,
+                nombre VARCHAR(255),
+                cliente_id INTEGER REFERENCES clientes(id),
+                descripcion TEXT,
+                estado VARCHAR(50),
+                fecha_inicio DATE,
+                fecha_entrega DATE,
+                presupuesto DECIMAL(10,2)
+            )
+        """))
+        conn.execute(text("""
+            CREATE TABLE IF NOT EXISTS tareas (
+                id SERIAL PRIMARY KEY,
+                proyecto_id INTEGER REFERENCES proyectos(id),
+                nombre VARCHAR(255),
+                responsable VARCHAR(255),
+                estado VARCHAR(50),
+                prioridad VARCHAR(50),
+                fecha_limite DATE
+            )
+        """))
+        conn.execute(text("""
+            CREATE TABLE IF NOT EXISTS pagos (
+                id SERIAL PRIMARY KEY,
+                cliente_id INTEGER REFERENCES clientes(id),
+                proyecto_id INTEGER REFERENCES proyectos(id),
+                concepto VARCHAR(255),
+                monto DECIMAL(10,2),
+                estado VARCHAR(50),
+                fecha_emision DATE,
+                fecha_pago DATE
+            )
+        """))
+        conn.commit()
+    print("Base de datos inicializada correctamente.")
 
-    # Tabla de Clientes
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS clientes (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            nombre TEXT NOT NULL,
-            empresa TEXT,
-            email TEXT,
-            telefono TEXT,
-            tipo TEXT,
-            fecha_registro TEXT
-        )
-    """)
-
-    # Tabla de Proyectos
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS proyectos (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            nombre TEXT NOT NULL,
-            cliente_id INTEGER,
-            descripcion TEXT,
-            estado TEXT,
-            fecha_inicio TEXT,
-            fecha_entrega TEXT,
-            presupuesto REAL,
-            FOREIGN KEY (cliente_id) REFERENCES clientes(id)
-        )
-    """)
-
-    # Tabla de Tareas
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS tareas (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            proyecto_id INTEGER,
-            nombre TEXT NOT NULL,
-            responsable TEXT,
-            estado TEXT,
-            prioridad TEXT,
-            fecha_limite TEXT,
-            FOREIGN KEY (proyecto_id) REFERENCES proyectos(id)
-        )
-    """)
-
-    # Tabla de Pagos
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS pagos (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            cliente_id INTEGER,
-            proyecto_id INTEGER,
-            concepto TEXT,
-            monto REAL,
-            estado TEXT,
-            fecha_emision TEXT,
-            fecha_pago TEXT,
-            FOREIGN KEY (cliente_id) REFERENCES clientes(id),
-            FOREIGN KEY (proyecto_id) REFERENCES proyectos(id)
-        )
-    """)
-
-    conn.commit()
-    conn.close()
-
-# Esto crea las tablas automaticamente cuando se ejecuta
-crear_tablas()
+if __name__ == "__main__":
+    inicializar_db()
