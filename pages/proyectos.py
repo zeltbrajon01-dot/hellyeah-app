@@ -4,8 +4,8 @@ import os
 from dotenv import load_dotenv
 from datetime import date, datetime
 
-load_dotenv()
-DATABASE_URL = os.getenv("DATABASE_URL")
+from config import get_database_url
+DATABASE_URL = get_database_url()
 
 def crear_conexion():
     engine = create_engine(DATABASE_URL)
