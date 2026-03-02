@@ -5,3 +5,4 @@ Pillow
 streamlit-cookies-manager
 psycopg2-binary
 sqlalchemy
+python-dotenv
