@@ -4,7 +4,17 @@ import os
 from dotenv import load_dotenv
 from datetime import date
 
-from config import get_database_url
+import streamlit as st
+import os
+
+def get_database_url():
+    try:
+        return st.secrets["DATABASE_URL"]
+    except:
+        from dotenv import load_dotenv
+        load_dotenv()
+        return os.getenv("DATABASE_URL")
+
 DATABASE_URL = get_database_url()
 
 def crear_conexion():

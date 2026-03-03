@@ -5,8 +5,18 @@ import plotly.graph_objects as go
 import os
 from dotenv import load_dotenv
 
-load_dotenv()
-DATABASE_URL = os.getenv("DATABASE_URL")
+import streamlit as st
+import os
+
+def get_database_url():
+    try:
+        return st.secrets["DATABASE_URL"]
+    except:
+        from dotenv import load_dotenv
+        load_dotenv()
+        return os.getenv("DATABASE_URL")
+
+DATABASE_URL = get_database_url()
 
 def crear_conexion():
     engine = create_engine(DATABASE_URL)
