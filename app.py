@@ -3,7 +3,6 @@ from pages import clientes
 from pages import proyectos
 from pages import pagos
 from pages import dashboard
-from PIL import Image
 from streamlit_cookies_manager import EncryptedCookieManager
 
 st.set_page_config(
@@ -119,7 +118,6 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# ---- COOKIES PARA MANTENER SESIÓN ----
 cookies = EncryptedCookieManager(
     prefix="hellyeah_",
     password="hellyeah_super_secret_key_2026"
@@ -148,8 +146,16 @@ def mostrar_login():
     col1, col2, col3 = st.columns([1, 0.6, 1])
     with col2:
         try:
-            logo = Image.open("logo.jpeg")
-            st.image(logo, use_container_width=True)
+            from PIL import Image
+            import os
+            logo_paths = ["logo.jpeg", "/mount/src/hellyeah-app/logo.jpeg"]
+            for path in logo_paths:
+                if os.path.exists(path):
+                    logo = Image.open(path)
+                    st.image(logo, use_container_width=True)
+                    break
+            else:
+                st.markdown("<h2 style='text-align:center; color:#C6FF00;'>🔥 HellYeah</h2>", unsafe_allow_html=True)
         except:
             st.markdown("<h2 style='text-align:center; color:#C6FF00;'>🔥 HellYeah</h2>", unsafe_allow_html=True)
 
@@ -178,17 +184,24 @@ def mostrar_login():
             </p>
         """, unsafe_allow_html=True)
 
-# ---- VERIFICAR SESIÓN ----
 autenticado = cookies.get("autenticado") == "true"
 
 if not autenticado:
     mostrar_login()
 else:
     try:
-        logo = Image.open("logo.jpeg")
-        st.sidebar.image(logo, use_container_width=True)
+        from PIL import Image
+        import os
+        logo_paths = ["logo.jpeg", "/mount/src/hellyeah-app/logo.jpeg"]
+        for path in logo_paths:
+            if os.path.exists(path):
+                logo = Image.open(path)
+                st.sidebar.image(logo, use_container_width=True)
+                break
+        else:
+            st.sidebar.markdown("<h2 style='color:#C6FF00;'>🔥 HellYeah Agency</h2>", unsafe_allow_html=True)
     except:
-        st.sidebar.title("🔥 HellYeah Agency")
+        st.sidebar.markdown("<h2 style='color:#C6FF00;'>🔥 HellYeah Agency</h2>", unsafe_allow_html=True)
 
     st.sidebar.markdown("---")
 
@@ -209,7 +222,7 @@ else:
     st.sidebar.markdown("---")
 
     menu = st.sidebar.radio("Navegación", [
-        "📊 Dashboard",
+        "📊 Panel de control",
         "👥 Clientes",
         "📁 Proyectos",
         "💰 Pagos"
@@ -224,7 +237,7 @@ else:
         cookies.save()
         st.rerun()
 
-    if menu == "📊 Dashboard":
+    if menu == "📊 Panel de control":
         dashboard.mostrar_dashboard()
     elif menu == "👥 Clientes":
         clientes.mostrar_clientes()
