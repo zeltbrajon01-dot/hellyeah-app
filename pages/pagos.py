@@ -1,46 +1,21 @@
 import streamlit as st
-from sqlalchemy import create_engine, text
-import os
-from dotenv import load_dotenv
+from config import get_supabase
 from datetime import date
-
-import streamlit as st
-import os
-
-def get_database_url():
-    try:
-        return st.secrets["DATABASE_URL"]
-    except:
-        from dotenv import load_dotenv
-        load_dotenv()
-        return os.getenv("DATABASE_URL")
-
-DATABASE_URL = get_database_url()
-
-def crear_conexion():
-    engine = create_engine(DATABASE_URL)
-    return engine
 
 def mostrar_pagos():
     st.title("💰 Gestión de Pagos")
     st.markdown("---")
 
-    engine = crear_conexion()
-    with engine.connect() as conn:
-        result = conn.execute(text("""
-            SELECT SUM(monto) FROM pagos WHERE estado = 'Pagado'
-        """))
-        total_cobrado = result.fetchone()[0] or 0
+    sb = get_supabase()
 
-        result = conn.execute(text("""
-            SELECT SUM(monto) FROM pagos WHERE estado = 'Pendiente'
-        """))
-        total_pendiente = result.fetchone()[0] or 0
+    pagos_cobrados = sb.table("pagos").select("monto").eq("estado", "Pagado").execute().data
+    total_cobrado = sum([p["monto"] for p in pagos_cobrados]) if pagos_cobrados else 0
 
-        result = conn.execute(text("""
-            SELECT SUM(monto) FROM pagos WHERE estado = 'Vencido'
-        """))
-        total_vencido = result.fetchone()[0] or 0
+    pagos_pendientes = sb.table("pagos").select("monto").eq("estado", "Pendiente").execute().data
+    total_pendiente = sum([p["monto"] for p in pagos_pendientes]) if pagos_pendientes else 0
+
+    pagos_vencidos = sb.table("pagos").select("monto").eq("estado", "Vencido").execute().data
+    total_vencido = sum([p["monto"] for p in pagos_vencidos]) if pagos_vencidos else 0
 
     col1, col2, col3 = st.columns(3)
     with col1:
@@ -76,105 +51,59 @@ def mostrar_pagos():
     with tab1:
         filtro = st.selectbox("Filtrar por estado", ["Todos", "Pagado", "Pendiente", "Vencido"])
 
-        engine = crear_conexion()
-        with engine.connect() as conn:
-            if filtro == "Todos":
-                result = conn.execute(text("""
-                    SELECT p.id, c.empresa, pr.nombre, p.concepto, p.monto, 
-                           p.estado, p.fecha_emision, p.fecha_pago
-                    FROM pagos p
-                    LEFT JOIN clientes c ON p.cliente_id = c.id
-                    LEFT JOIN proyectos pr ON p.proyecto_id = pr.id
-                    ORDER BY p.id DESC
-                """))
-            else:
-                result = conn.execute(text("""
-                    SELECT p.id, c.empresa, pr.nombre, p.concepto, p.monto,
-                           p.estado, p.fecha_emision, p.fecha_pago
-                    FROM pagos p
-                    LEFT JOIN clientes c ON p.cliente_id = c.id
-                    LEFT JOIN proyectos pr ON p.proyecto_id = pr.id
-                    WHERE p.estado = :estado
-                    ORDER BY p.id DESC
-                """), {"estado": filtro})
-            pagos = result.fetchall()
+        if filtro == "Todos":
+            pagos = sb.table("pagos").select("*, clientes(empresa), proyectos(nombre)").order("id", desc=True).execute().data
+        else:
+            pagos = sb.table("pagos").select("*, clientes(empresa), proyectos(nombre)").eq("estado", filtro).order("id", desc=True).execute().data
 
-        if len(pagos) == 0:
+        if not pagos:
             st.info("No hay pagos registrados todavía.")
         else:
             for pago in pagos:
-                if pago[5] == "Pagado":
-                    icono = "✅"
-                    color = "#2ECC71"
-                elif pago[5] == "Vencido":
-                    icono = "🚨"
-                    color = "#E74C3C"
-                else:
-                    icono = "⏳"
-                    color = "#F39C12"
+                empresa = pago["clientes"]["empresa"] if pago.get("clientes") else "Sin cliente"
+                proyecto = pago["proyectos"]["nombre"] if pago.get("proyectos") else "Sin proyecto"
+                icono = "✅" if pago["estado"] == "Pagado" else "🚨" if pago["estado"] == "Vencido" else "⏳"
 
-                with st.expander(f"{icono} {pago[3]} — {pago[1]} — ${pago[4]:,.2f}"):
+                with st.expander(f"{icono} {pago['concepto']} — {empresa} — ${pago['monto']:,.2f}"):
                     col1, col2 = st.columns(2)
                     with col1:
-                        st.write(f"**Cliente:** {pago[1]}")
-                        st.write(f"**Proyecto:** {pago[2] or 'Sin proyecto'}")
-                        st.write(f"**Concepto:** {pago[3]}")
+                        st.write(f"**Cliente:** {empresa}")
+                        st.write(f"**Proyecto:** {proyecto}")
+                        st.write(f"**Concepto:** {pago['concepto']}")
                     with col2:
-                        st.write(f"**Monto:** ${pago[4]:,.2f}")
-                        st.write(f"**Estado:** {pago[5]}")
-                        st.write(f"**Fecha emisión:** {pago[6]}")
-                        st.write(f"**Fecha pago:** {pago[7] or 'Pendiente'}")
+                        st.write(f"**Monto:** ${pago['monto']:,.2f}")
+                        st.write(f"**Estado:** {pago['estado']}")
+                        st.write(f"**Fecha emisión:** {pago['fecha_emision']}")
+                        st.write(f"**Fecha pago:** {pago['fecha_pago'] or 'Pendiente'}")
 
                     col_a, col_b, col_c, col_d = st.columns(4)
-
                     with col_a:
-                        if st.button("✅ Pagado", key=f"pagado_{pago[0]}"):
-                            engine = crear_conexion()
-                            with engine.connect() as conn:
-                                conn.execute(text("""
-                                    UPDATE pagos SET estado='Pagado', fecha_pago=:fecha 
-                                    WHERE id=:id
-                                """), {"fecha": str(date.today()), "id": pago[0]})
-                                conn.commit()
+                        if st.button("✅ Pagado", key=f"pagado_{pago['id']}"):
+                            sb.table("pagos").update({"estado": "Pagado", "fecha_pago": str(date.today())}).eq("id", pago['id']).execute()
                             st.rerun()
-
                     with col_b:
-                        if st.button("🚨 Vencido", key=f"vencido_{pago[0]}"):
-                            engine = crear_conexion()
-                            with engine.connect() as conn:
-                                conn.execute(text("""
-                                    UPDATE pagos SET estado='Vencido' WHERE id=:id
-                                """), {"id": pago[0]})
-                                conn.commit()
+                        if st.button("🚨 Vencido", key=f"vencido_{pago['id']}"):
+                            sb.table("pagos").update({"estado": "Vencido"}).eq("id", pago['id']).execute()
                             st.rerun()
-
                     with col_c:
-                        if st.button("✏️ Editar", key=f"edit_pago_{pago[0]}"):
-                            st.session_state[f"editando_pago_{pago[0]}"] = True
-
+                        if st.button("✏️ Editar", key=f"edit_pago_{pago['id']}"):
+                            st.session_state[f"editando_pago_{pago['id']}"] = True
                     with col_d:
-                        if st.button("🗑️ Eliminar", key=f"del_pago_{pago[0]}"):
-                            engine = crear_conexion()
-                            with engine.connect() as conn:
-                                conn.execute(text("DELETE FROM pagos WHERE id=:id"), {"id": pago[0]})
-                                conn.commit()
+                        if st.button("🗑️ Eliminar", key=f"del_pago_{pago['id']}"):
+                            sb.table("pagos").delete().eq("id", pago['id']).execute()
                             st.success("Pago eliminado.")
                             st.rerun()
 
-                    if st.session_state.get(f"editando_pago_{pago[0]}", False):
-                        with st.form(key=f"form_edit_pago_{pago[0]}"):
+                    if st.session_state.get(f"editando_pago_{pago['id']}", False):
+                        with st.form(key=f"form_edit_pago_{pago['id']}"):
                             st.markdown("### ✏️ Editar Pago")
                             col1, col2 = st.columns(2)
                             with col1:
-                                nuevo_concepto = st.text_input("Concepto", value=pago[3])
-                                nuevo_monto = st.number_input("Monto", value=float(pago[4]), min_value=0.0)
+                                nuevo_concepto = st.text_input("Concepto", value=pago['concepto'])
+                                nuevo_monto = st.number_input("Monto", value=float(pago['monto']), min_value=0.0)
                             with col2:
                                 nuevo_estado = st.selectbox("Estado", ["Pendiente", "Pagado", "Vencido"],
-                                    index=["Pendiente", "Pagado", "Vencido"].index(pago[5]) if pago[5] in ["Pendiente", "Pagado", "Vencido"] else 0)
-                                nueva_fecha_emision = st.date_input("Fecha emisión",
-                                    value=pago[6] if pago[6] else date.today())
-                                nueva_fecha_pago = st.date_input("Fecha pago",
-                                    value=pago[7] if pago[7] else date.today())
+                                    index=["Pendiente", "Pagado", "Vencido"].index(pago['estado']) if pago['estado'] in ["Pendiente", "Pagado", "Vencido"] else 0)
 
                             col_g, col_c2 = st.columns(2)
                             with col_g:
@@ -183,47 +112,31 @@ def mostrar_pagos():
                                 cancelar = st.form_submit_button("❌ Cancelar", use_container_width=True)
 
                             if guardar:
-                                engine = crear_conexion()
-                                with engine.connect() as conn:
-                                    conn.execute(text("""
-                                        UPDATE pagos 
-                                        SET concepto=:concepto, monto=:monto, estado=:estado,
-                                            fecha_emision=:fecha_emision, fecha_pago=:fecha_pago
-                                        WHERE id=:id
-                                    """), {
-                                        "concepto": nuevo_concepto,
-                                        "monto": nuevo_monto,
-                                        "estado": nuevo_estado,
-                                        "fecha_emision": str(nueva_fecha_emision),
-                                        "fecha_pago": str(nueva_fecha_pago),
-                                        "id": pago[0]
-                                    })
-                                    conn.commit()
+                                sb.table("pagos").update({
+                                    "concepto": nuevo_concepto,
+                                    "monto": nuevo_monto,
+                                    "estado": nuevo_estado
+                                }).eq("id", pago['id']).execute()
                                 st.success("✅ Pago actualizado.")
-                                st.session_state[f"editando_pago_{pago[0]}"] = False
+                                st.session_state[f"editando_pago_{pago['id']}"] = False
                                 st.rerun()
-
                             if cancelar:
-                                st.session_state[f"editando_pago_{pago[0]}"] = False
+                                st.session_state[f"editando_pago_{pago['id']}"] = False
                                 st.rerun()
 
     with tab2:
         st.subheader("➕ Registrar Nuevo Pago")
 
-        engine = crear_conexion()
-        with engine.connect() as conn:
-            result = conn.execute(text("SELECT id, nombre, empresa FROM clientes"))
-            clientes = result.fetchall()
-            result = conn.execute(text("SELECT id, nombre FROM proyectos"))
-            proyectos = result.fetchall()
+        clientes = sb.table("clientes").select("id, nombre, empresa").execute().data
+        proyectos = sb.table("proyectos").select("id, nombre").execute().data
 
-        if len(clientes) == 0:
+        if not clientes:
             st.warning("⚠️ Primero debes agregar clientes.")
         else:
             col1, col2 = st.columns(2)
-            cliente_opciones = {f"{c[1]} — {c[2]}": c[0] for c in clientes}
+            cliente_opciones = {f"{c['nombre']} — {c['empresa']}": c['id'] for c in clientes}
             proyecto_opciones = {"Sin proyecto": None}
-            proyecto_opciones.update({p[1]: p[0] for p in proyectos})
+            proyecto_opciones.update({p['nombre']: p['id'] for p in proyectos})
 
             with col1:
                 concepto = st.text_input("Concepto *", placeholder="Ej: Mensualidad Marzo")
@@ -241,20 +154,14 @@ def mostrar_pagos():
                 if concepto == "":
                     st.error("⚠️ El concepto es obligatorio.")
                 else:
-                    engine = crear_conexion()
-                    with engine.connect() as conn:
-                        conn.execute(text("""
-                            INSERT INTO pagos (cliente_id, proyecto_id, concepto, monto, estado, fecha_emision, fecha_pago)
-                            VALUES (:cliente_id, :proyecto_id, :concepto, :monto, :estado, :fecha_emision, :fecha_pago)
-                        """), {
-                            "cliente_id": cliente_opciones[cliente_sel],
-                            "proyecto_id": proyecto_opciones[proyecto_sel],
-                            "concepto": concepto,
-                            "monto": monto,
-                            "estado": estado,
-                            "fecha_emision": str(fecha_emision),
-                            "fecha_pago": str(fecha_pago)
-                        })
-                        conn.commit()
-                    st.success(f"✅ Pago registrado correctamente.")
+                    sb.table("pagos").insert({
+                        "cliente_id": cliente_opciones[cliente_sel],
+                        "proyecto_id": proyecto_opciones[proyecto_sel],
+                        "concepto": concepto,
+                        "monto": monto,
+                        "estado": estado,
+                        "fecha_emision": str(fecha_emision),
+                        "fecha_pago": str(fecha_pago)
+                    }).execute()
+                    st.success("✅ Pago registrado correctamente.")
                     st.balloons()

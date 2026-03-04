@@ -1,10 +1,7 @@
-import os
 import streamlit as st
 
-def get_database_url():
-    try:
-        return st.secrets["DATABASE_URL"]
-    except:
-        from dotenv import load_dotenv
-        load_dotenv()
-        return os.getenv("DATABASE_URL")
+def get_supabase():
+    from supabase import create_client
+    url = st.secrets["SUPABASE_URL"]
+    key = st.secrets["SUPABASE_KEY"]
+    return create_client(url, key)

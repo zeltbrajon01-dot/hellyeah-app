@@ -1,80 +1,55 @@
 import streamlit as st
-from sqlalchemy import create_engine, text
-import os
-from dotenv import load_dotenv
+from config import get_supabase
 from datetime import date
-
-import streamlit as st
-import os
-
-def get_database_url():
-    try:
-        return st.secrets["DATABASE_URL"]
-    except:
-        from dotenv import load_dotenv
-        load_dotenv()
-        return os.getenv("DATABASE_URL")
-
-DATABASE_URL = get_database_url()
-
-def crear_conexion():
-    engine = create_engine(DATABASE_URL)
-    return engine
 
 def mostrar_clientes():
     st.title("👥 Gestión de Clientes")
     st.markdown("---")
 
+    sb = get_supabase()
+
     tab1, tab2 = st.tabs(["📋 Lista de Clientes", "➕ Agregar Cliente"])
 
     with tab1:
-        engine = crear_conexion()
-        with engine.connect() as conn:
-            result = conn.execute(text("SELECT * FROM clientes ORDER BY id DESC"))
-            clientes = result.fetchall()
+        clientes = sb.table("clientes").select("*").order("id", desc=True).execute().data
 
-        if len(clientes) == 0:
+        if not clientes:
             st.info("No hay clientes registrados todavía.")
         else:
             for cliente in clientes:
-                with st.expander(f"👤 {cliente[1]} — {cliente[2]}"):
+                with st.expander(f"👤 {cliente['nombre']} — {cliente['empresa']}"):
                     col1, col2 = st.columns(2)
                     with col1:
-                        st.write(f"**Nombre:** {cliente[1]}")
-                        st.write(f"**Empresa:** {cliente[2]}")
-                        st.write(f"**Email:** {cliente[3]}")
+                        st.write(f"**Nombre:** {cliente['nombre']}")
+                        st.write(f"**Empresa:** {cliente['empresa']}")
+                        st.write(f"**Email:** {cliente['email']}")
                     with col2:
-                        st.write(f"**Teléfono:** {cliente[4]}")
-                        st.write(f"**Tipo:** {cliente[5]}")
-                        st.write(f"**Fecha registro:** {cliente[6]}")
+                        st.write(f"**Teléfono:** {cliente['telefono']}")
+                        st.write(f"**Tipo:** {cliente['tipo']}")
+                        st.write(f"**Fecha registro:** {cliente['fecha_registro']}")
 
                     col_edit, col_del = st.columns(2)
-
                     with col_edit:
-                        if st.button("✏️ Editar", key=f"edit_{cliente[0]}"):
-                            st.session_state[f"editando_{cliente[0]}"] = True
-
+                        if st.button("✏️ Editar", key=f"edit_{cliente['id']}"):
+                            st.session_state[f"editando_{cliente['id']}"] = True
                     with col_del:
-                        if st.button("🗑️ Eliminar", key=f"del_{cliente[0]}"):
-                            engine = crear_conexion()
-                            with engine.connect() as conn:
-                                conn.execute(text("DELETE FROM clientes WHERE id = :id"), {"id": cliente[0]})
-                                conn.commit()
-                            st.success("Cliente eliminado correctamente.")
+                        if st.button("🗑️ Eliminar", key=f"del_{cliente['id']}"):
+                            sb.table("clientes").delete().eq("id", cliente['id']).execute()
+                            st.success("Cliente eliminado.")
                             st.rerun()
 
-                    if st.session_state.get(f"editando_{cliente[0]}", False):
-                        with st.form(key=f"form_edit_{cliente[0]}"):
+                    if st.session_state.get(f"editando_{cliente['id']}", False):
+                        with st.form(key=f"form_edit_{cliente['id']}"):
                             st.markdown("### ✏️ Editar Cliente")
                             col1, col2 = st.columns(2)
                             with col1:
-                                nuevo_nombre = st.text_input("Nombre", value=cliente[1])
-                                nueva_empresa = st.text_input("Empresa", value=cliente[2])
-                                nuevo_email = st.text_input("Email", value=cliente[3])
+                                nuevo_nombre = st.text_input("Nombre", value=cliente['nombre'])
+                                nueva_empresa = st.text_input("Empresa", value=cliente['empresa'])
+                                nuevo_email = st.text_input("Email", value=cliente['email'])
                             with col2:
-                                nuevo_telefono = st.text_input("Teléfono", value=cliente[4])
+                                nuevo_telefono = st.text_input("Teléfono", value=cliente['telefono'])
                                 nuevo_tipo = st.selectbox("Tipo", ["Pequeño", "Mediano", "Grande"],
-                                    index=["Pequeño", "Mediano", "Grande"].index(cliente[5]) if cliente[5] in ["Pequeño", "Mediano", "Grande"] else 0)
+                                    index=["Pequeño", "Mediano", "Grande"].index(cliente['tipo']) if cliente['tipo'] in ["Pequeño", "Mediano", "Grande"] else 0)
 
                             col_g, col_c = st.columns(2)
                             with col_g:
@@ -83,28 +58,19 @@ def mostrar_clientes():
                                 cancelar = st.form_submit_button("❌ Cancelar", use_container_width=True)
 
                             if guardar:
-                                engine = crear_conexion()
-                                with engine.connect() as conn:
-                                    conn.execute(text("""
-                                        UPDATE clientes 
-                                        SET nombre=:nombre, empresa=:empresa, email=:email,
-                                            telefono=:telefono, tipo=:tipo
-                                        WHERE id=:id
-                                    """), {
-                                        "nombre": nuevo_nombre,
-                                        "empresa": nueva_empresa,
-                                        "email": nuevo_email,
-                                        "telefono": nuevo_telefono,
-                                        "tipo": nuevo_tipo,
-                                        "id": cliente[0]
-                                    })
-                                    conn.commit()
-                                st.success("✅ Cliente actualizado correctamente.")
-                                st.session_state[f"editando_{cliente[0]}"] = False
+                                sb.table("clientes").update({
+                                    "nombre": nuevo_nombre,
+                                    "empresa": nueva_empresa,
+                                    "email": nuevo_email,
+                                    "telefono": nuevo_telefono,
+                                    "tipo": nuevo_tipo
+                                }).eq("id", cliente['id']).execute()
+                                st.success("✅ Cliente actualizado.")
+                                st.session_state[f"editando_{cliente['id']}"] = False
                                 st.rerun()
 
                             if cancelar:
-                                st.session_state[f"editando_{cliente[0]}"] = False
+                                st.session_state[f"editando_{cliente['id']}"] = False
                                 st.rerun()
 
     with tab2:
@@ -126,19 +92,13 @@ def mostrar_clientes():
             if nombre == "" or empresa == "":
                 st.error("⚠️ Nombre y empresa son obligatorios.")
             else:
-                engine = crear_conexion()
-                with engine.connect() as conn:
-                    conn.execute(text("""
-                        INSERT INTO clientes (nombre, empresa, email, telefono, tipo, fecha_registro)
-                        VALUES (:nombre, :empresa, :email, :telefono, :tipo, :fecha)
-                    """), {
-                        "nombre": nombre,
-                        "empresa": empresa,
-                        "email": email,
-                        "telefono": telefono,
-                        "tipo": tipo,
-                        "fecha": str(fecha_registro)
-                    })
-                    conn.commit()
+                sb.table("clientes").insert({
+                    "nombre": nombre,
+                    "empresa": empresa,
+                    "email": email,
+                    "telefono": telefono,
+                    "tipo": tipo,
+                    "fecha_registro": str(fecha_registro)
+                }).execute()
                 st.success(f"✅ Cliente '{nombre}' agregado correctamente.")
                 st.balloons()
