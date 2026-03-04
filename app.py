@@ -23,8 +23,8 @@ st.markdown("""
             background-color: #0a0a0a;
         }
         section[data-testid="stSidebar"] {
-            background: linear-gradient(180deg, #0d0d0d, #111111);
-            border-right: 1px solid #C6FF0022;
+            background: #1a1a1a !important;
+            border-right: 2px solid #C6FF00 !important;
         }
         .stButton > button {
             background: linear-gradient(135deg, #C6FF00, #a8d900);
