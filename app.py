@@ -135,11 +135,6 @@ USUARIOS = {
 }
 
 def mostrar_login():
-    st.markdown("""
-        <style>
-            section[data-testid="stSidebar"] {display: none;}
-        </style>
-    """, unsafe_allow_html=True)
 
     st.markdown("<br><br>", unsafe_allow_html=True)
 
