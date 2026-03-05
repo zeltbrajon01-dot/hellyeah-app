@@ -19,101 +19,134 @@ st.markdown("""
         header {visibility: hidden;}
 
         .stApp {
-            background-color: #0a0a0a;
+            background-color: #f4f6f9;
         }
+
         section[data-testid="stSidebar"] {
-            background: #1a1a1a !important;
-            border-right: 2px solid #C6FF00 !important;
+            background: #1a2332 !important;
+            border-right: none !important;
         }
+
+        section[data-testid="stSidebar"] * {
+            color: #ffffff !important;
+        }
+
+        section[data-testid="stSidebar"] .stRadio > div > label {
+            background-color: transparent !important;
+            border: none !important;
+            border-radius: 8px !important;
+            padding: 10px 15px !important;
+            color: #adb5bd !important;
+            font-weight: 500 !important;
+            transition: all 0.2s !important;
+        }
+
+        section[data-testid="stSidebar"] .stRadio > div > label:hover {
+            background-color: #2d3f55 !important;
+            color: #ffffff !important;
+        }
+
+        section[data-testid="stSidebar"] .stRadio > div > label[data-checked="true"] {
+            background-color: #2d3f55 !important;
+            color: #ffffff !important;
+            border-left: 3px solid #4A90D9 !important;
+        }
+
         .stButton > button {
-            background: linear-gradient(135deg, #C6FF00, #a8d900);
-            color: #000000;
-            font-weight: 700;
+            background: #4A90D9;
+            color: #ffffff;
+            font-weight: 600;
             border: none;
-            border-radius: 8px;
+            border-radius: 6px;
             padding: 10px 20px;
             font-size: 0.9rem;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
         }
+
         .stButton > button:hover {
-            background: linear-gradient(135deg, #d4ff33, #C6FF00);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 15px #C6FF0044;
+            background: #357abd;
+            box-shadow: 0 2px 8px rgba(74,144,217,0.4);
         }
+
         .stTextInput > div > div > input,
         .stTextArea > div > div > textarea,
         .stNumberInput > div > div > input {
-            background-color: #1a1a1a;
-            border: 1px solid #C6FF0033;
-            border-radius: 8px;
-            color: white;
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            color: #333333;
         }
+
         .stTextInput > div > div > input:focus,
         .stTextArea > div > div > textarea:focus {
-            border-color: #C6FF00;
-            box-shadow: 0 0 0 1px #C6FF00;
+            border-color: #4A90D9;
+            box-shadow: 0 0 0 2px rgba(74,144,217,0.2);
         }
+
         .stSelectbox > div > div {
-            background-color: #1a1a1a;
-            border: 1px solid #C6FF0033;
-            border-radius: 8px;
-            color: white;
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            color: #333333;
         }
+
         .stTabs [data-baseweb="tab-list"] {
-            background-color: #111111;
-            border-radius: 10px;
+            background-color: #ffffff;
+            border-radius: 8px;
             padding: 4px;
             gap: 4px;
+            border: 1px solid #dee2e6;
         }
+
         .stTabs [data-baseweb="tab"] {
             background-color: transparent;
-            border-radius: 8px;
-            color: #aaa;
+            border-radius: 6px;
+            color: #666;
             font-weight: 600;
         }
+
         .stTabs [aria-selected="true"] {
-            background: linear-gradient(135deg, #C6FF00, #a8d900) !important;
-            color: #000000 !important;
+            background: #4A90D9 !important;
+            color: #ffffff !important;
         }
+
         .streamlit-expanderHeader {
-            background-color: #1a1a1a;
-            border: 1px solid #C6FF0022;
-            border-radius: 10px;
-            color: white;
-        }
-        .streamlit-expanderContent {
-            background-color: #111111;
-            border: 1px solid #C6FF0011;
-            border-radius: 0 0 10px 10px;
-        }
-        .stRadio > div {
-            gap: 8px;
-        }
-        .stRadio > div > label {
-            background-color: #1a1a1a;
-            border: 1px solid #C6FF0022;
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
             border-radius: 8px;
-            padding: 8px 12px;
-            color: white;
-            transition: all 0.2s;
+            color: #333333;
         }
-        .stRadio > div > label:hover {
-            border-color: #C6FF00;
-            color: #C6FF00;
+
+        .streamlit-expanderContent {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 0 0 8px 8px;
         }
+
         [data-testid="stMetric"] {
-            background-color: #1a1a1a;
-            border: 1px solid #C6FF0022;
-            border-radius: 12px;
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
             padding: 15px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
         }
+
         hr {
-            border-color: #C6FF0022;
+            border-color: #dee2e6;
         }
+
         .block-container {
             padding-left: 2rem;
             padding-right: 2rem;
             padding-top: 1.5rem;
+        }
+
+        h1, h2, h3, h4 {
+            color: #1a2332 !important;
+        }
+
+        p, label, div {
+            color: #333333;
         }
     </style>
 """, unsafe_allow_html=True)
@@ -135,29 +168,23 @@ USUARIOS = {
 }
 
 def mostrar_login():
-
     st.markdown("<br><br>", unsafe_allow_html=True)
 
-    col1, col2, col3 = st.columns([1, 0.6, 1])
+    col1, col2, col3 = st.columns([1, 0.5, 1])
     with col2:
-        try:
-            from PIL import Image
-            import os
-            logo_paths = ["logo.jpeg", "/mount/src/hellyeah-app/logo.jpeg"]
-            for path in logo_paths:
-                if os.path.exists(path):
-                    logo = Image.open(path)
-                    st.image(logo, use_container_width=True)
-                    break
-            else:
-                st.markdown("<h2 style='text-align:center; color:#C6FF00;'>🔥 HellYeah</h2>", unsafe_allow_html=True)
-        except:
-            st.markdown("<h2 style='text-align:center; color:#C6FF00;'>🔥 HellYeah</h2>", unsafe_allow_html=True)
+        st.markdown("""
+            <div style="
+                background: white;
+                border-radius: 12px;
+                padding: 40px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+                text-align: center;
+            ">
+                <h2 style="color:#1a2332; margin-bottom:5px;">🔥 HellYeah Agency</h2>
+                <p style="color:#888; margin-bottom:25px;">Inicia sesión para continuar</p>
+            </div>
+        """, unsafe_allow_html=True)
 
-    st.markdown("<br>", unsafe_allow_html=True)
-
-    col1, col2, col3 = st.columns([1, 0.6, 1])
-    with col2:
         usuario = st.text_input("Usuario", placeholder="Tu usuario")
         password = st.text_input("Contraseña", type="password", placeholder="Tu contraseña")
         st.markdown("<br>", unsafe_allow_html=True)
@@ -174,7 +201,7 @@ def mostrar_login():
                 st.error("Usuario o contraseña incorrectos.")
 
         st.markdown("""
-            <p style="text-align:center; color:#555; font-size:0.75rem; margin-top:15px;">
+            <p style="text-align:center; color:#aaa; font-size:0.75rem; margin-top:15px;">
                 🔒 Acceso seguro y privado
             </p>
         """, unsafe_allow_html=True)
@@ -194,23 +221,22 @@ else:
                 st.sidebar.image(logo, use_container_width=True)
                 break
         else:
-            st.sidebar.markdown("<h2 style='color:#C6FF00;'>🔥 HellYeah Agency</h2>", unsafe_allow_html=True)
+            st.sidebar.markdown("<h2 style='color:#ffffff; text-align:center;'>🔥 HellYeah</h2>", unsafe_allow_html=True)
     except:
-        st.sidebar.markdown("<h2 style='color:#C6FF00;'>🔥 HellYeah Agency</h2>", unsafe_allow_html=True)
+        st.sidebar.markdown("<h2 style='color:#ffffff; text-align:center;'>🔥 HellYeah</h2>", unsafe_allow_html=True)
 
     st.sidebar.markdown("---")
 
     st.sidebar.markdown(f"""
         <div style="
-            background: linear-gradient(135deg, #C6FF0011, #C6FF0022);
-            border-left: 3px solid #C6FF00;
+            background: #2d3f55;
             border-radius: 8px;
             padding: 10px 15px;
             margin-bottom: 10px;
         ">
-            <div style="color: #aaa; font-size: 0.75rem;">Conectado como</div>
+            <div style="color: #adb5bd; font-size: 0.75rem;">Conectado como</div>
             <div style="color: white; font-weight: bold;">👤 {cookies.get('nombre')}</div>
-            <div style="color: #C6FF00; font-size: 0.8rem;">🛡️ {cookies.get('rol', '').upper()}</div>
+            <div style="color: #4A90D9; font-size: 0.8rem;">🛡️ {cookies.get('rol', '').upper()}</div>
         </div>
     """, unsafe_allow_html=True)
 
