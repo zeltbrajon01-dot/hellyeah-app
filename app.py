@@ -13,31 +13,34 @@ st.set_page_config(
 
 st.markdown("""
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&display=swap');
 
         [data-testid="stSidebarNav"] {display: none;}
         #MainMenu {visibility: hidden;}
         footer {visibility: hidden;}
         header {visibility: hidden;}
 
-        * { font-family: 'Montserrat', sans-serif; }
+        html, body, * {
+            font-family: 'Montserrat', sans-serif !important;
+        }
 
         .stApp {
-            background: #FAFAFA;
+            background: #F6F7FB !important;
         }
 
         section[data-testid="stSidebar"] {
             background: #FFFFFF !important;
-            border-right: 1px solid #F0F0F0 !important;
-            width: 240px !important;
-        }
-
-        section[data-testid="stSidebar"] > div {
-            padding: 0 !important;
+            border-right: 1px solid #E6E9EF !important;
+            min-width: 230px !important;
+            max-width: 230px !important;
         }
 
         section[data-testid="stSidebar"] * {
-            color: #1A1A1A !important;
+            color: #323338 !important;
+        }
+
+        section[data-testid="stSidebar"] > div {
+            padding-top: 0 !important;
         }
 
         .stRadio > div {
@@ -47,134 +50,148 @@ st.markdown("""
         .stRadio > div > label {
             background: transparent !important;
             border: none !important;
-            border-radius: 10px !important;
-            padding: 11px 16px !important;
-            color: #888888 !important;
+            border-radius: 8px !important;
+            padding: 9px 14px !important;
+            color: #676879 !important;
             font-weight: 500 !important;
-            font-size: 0.85rem !important;
-            transition: all 0.2s ease !important;
-            margin: 1px 8px !important;
+            font-size: 0.84rem !important;
+            transition: all 0.15s ease !important;
+            margin: 1px 6px !important;
+            cursor: pointer !important;
         }
 
         .stRadio > div > label:hover {
-            background: #F5F5F7 !important;
-            color: #1A1A1A !important;
+            background: #F0F0F5 !important;
+            color: #323338 !important;
+        }
+
+        div[data-testid="stSidebar"] .stRadio label[data-checked="true"] {
+            background: #EEF0FF !important;
+            color: #4353FF !important;
+            font-weight: 600 !important;
         }
 
         .stButton > button {
-            background: #1A1A1A !important;
-            color: #ffffff !important;
+            background: #4353FF !important;
+            color: #FFFFFF !important;
             font-weight: 600 !important;
             border: none !important;
-            border-radius: 10px !important;
-            padding: 12px 24px !important;
-            font-size: 0.85rem !important;
-            transition: all 0.3s ease !important;
+            border-radius: 8px !important;
+            padding: 10px 20px !important;
+            font-size: 0.84rem !important;
+            transition: all 0.2s ease !important;
             font-family: 'Montserrat', sans-serif !important;
-            letter-spacing: 0.3px !important;
+            letter-spacing: 0.2px !important;
         }
 
         .stButton > button:hover {
-            background: #333333 !important;
+            background: #3342CC !important;
+            box-shadow: 0 4px 12px rgba(67,83,255,0.3) !important;
             transform: translateY(-1px) !important;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15) !important;
         }
 
         .stTextInput > div > div > input,
         .stTextArea > div > div > textarea,
         .stNumberInput > div > div > input {
             background: #FFFFFF !important;
-            border: 1px solid #E8E8E8 !important;
-            border-radius: 10px !important;
-            color: #1A1A1A !important;
+            border: 1px solid #C5C7D4 !important;
+            border-radius: 8px !important;
+            color: #323338 !important;
             font-family: 'Montserrat', sans-serif !important;
-            padding: 10px 14px !important;
+            font-size: 0.85rem !important;
+            padding: 9px 12px !important;
             transition: all 0.2s !important;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.04) !important;
         }
 
         .stTextInput > div > div > input:focus,
         .stTextArea > div > div > textarea:focus {
-            border-color: #1A1A1A !important;
-            box-shadow: 0 0 0 2px rgba(0,0,0,0.08) !important;
+            border-color: #4353FF !important;
+            box-shadow: 0 0 0 2px rgba(67,83,255,0.15) !important;
         }
 
         .stSelectbox > div > div {
             background: #FFFFFF !important;
-            border: 1px solid #E8E8E8 !important;
-            border-radius: 10px !important;
-            color: #1A1A1A !important;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.04) !important;
+            border: 1px solid #C5C7D4 !important;
+            border-radius: 8px !important;
+            color: #323338 !important;
+            font-size: 0.85rem !important;
         }
 
         .stTabs [data-baseweb="tab-list"] {
-            background: #F5F5F7 !important;
-            border-radius: 12px !important;
-            padding: 4px !important;
-            gap: 2px !important;
-            border: none !important;
+            background: transparent !important;
+            border-bottom: 2px solid #E6E9EF !important;
+            border-radius: 0 !important;
+            padding: 0 !important;
+            gap: 0 !important;
         }
 
         .stTabs [data-baseweb="tab"] {
             background: transparent !important;
-            border-radius: 10px !important;
-            color: #888888 !important;
+            border-radius: 0 !important;
+            color: #676879 !important;
             font-weight: 600 !important;
             font-size: 0.85rem !important;
-            font-family: 'Montserrat', sans-serif !important;
+            padding: 10px 20px !important;
+            border-bottom: 2px solid transparent !important;
+            margin-bottom: -2px !important;
         }
 
         .stTabs [aria-selected="true"] {
-            background: #FFFFFF !important;
-            color: #1A1A1A !important;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
+            background: transparent !important;
+            color: #4353FF !important;
+            border-bottom: 2px solid #4353FF !important;
         }
 
         .streamlit-expanderHeader {
             background: #FFFFFF !important;
-            border: 1px solid #F0F0F0 !important;
-            border-radius: 12px !important;
-            color: #1A1A1A !important;
+            border: 1px solid #E6E9EF !important;
+            border-radius: 10px !important;
+            color: #323338 !important;
             font-weight: 600 !important;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.04) !important;
+            font-size: 0.87rem !important;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05) !important;
         }
 
         .streamlit-expanderContent {
-            background: #FAFAFA !important;
-            border: 1px solid #F0F0F0 !important;
+            background: #FAFBFF !important;
+            border: 1px solid #E6E9EF !important;
             border-top: none !important;
-            border-radius: 0 0 12px 12px !important;
+            border-radius: 0 0 10px 10px !important;
         }
 
-        [data-testid="stMetric"] {
-            background: #FFFFFF !important;
-            border: 1px solid #F0F0F0 !important;
-            border-radius: 14px !important;
-            padding: 20px !important;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04) !important;
+        hr {
+            border: none !important;
+            border-top: 1px solid #E6E9EF !important;
         }
-
-        hr { border-color: #F0F0F0 !important; }
 
         .block-container {
-            padding-left: 3rem !important;
-            padding-right: 3rem !important;
-            padding-top: 2.5rem !important;
+            padding-left: 2.5rem !important;
+            padding-right: 2.5rem !important;
+            padding-top: 2rem !important;
+            max-width: 1400px !important;
         }
 
-        h1, h2, h3, h4 {
+        h1, h2, h3, h4, h5 {
             font-family: 'Montserrat', sans-serif !important;
-            color: #1A1A1A !important;
+            color: #323338 !important;
             font-weight: 700 !important;
-            letter-spacing: -0.5px !important;
+            letter-spacing: -0.3px !important;
         }
 
-        p, label, div {
-            color: #444444 !important;
+        p, span, div, label {
+            color: #323338 !important;
+            font-family: 'Montserrat', sans-serif !important;
         }
 
         .stMarkdown p {
-            color: #444444 !important;
+            color: #676879 !important;
+            font-size: 0.88rem !important;
+        }
+
+        [data-testid="stExpander"] {
+            border: 1px solid #E6E9EF !important;
+            border-radius: 10px !important;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.04) !important;
         }
     </style>
 """, unsafe_allow_html=True)
@@ -198,34 +215,43 @@ USUARIOS = {
 def mostrar_login():
     st.markdown("""
         <style>
-            .stApp { background: #FFFFFF !important; }
+            .stApp {
+                background: linear-gradient(135deg, #F6F7FB 0%, #EEF0FF 100%) !important;
+            }
         </style>
     """, unsafe_allow_html=True)
 
     st.markdown("<br><br><br><br>", unsafe_allow_html=True)
 
-    col1, col2, col3 = st.columns([1, 0.5, 1])
+    col1, col2, col3 = st.columns([1, 0.55, 1])
     with col2:
         st.markdown("""
-            <div style="text-align: center; margin-bottom: 40px;">
+            <div style="
+                background: #FFFFFF;
+                border-radius: 16px;
+                padding: 48px 40px 40px 40px;
+                box-shadow: 0 4px 32px rgba(0,0,0,0.08);
+                border: 1px solid #E6E9EF;
+                text-align: center;
+                margin-bottom: 24px;
+            ">
                 <div style="
-                    width: 56px; height: 56px;
-                    background: #1A1A1A;
-                    border-radius: 16px;
+                    width: 52px; height: 52px;
+                    background: linear-gradient(135deg, #4353FF, #6B5BFF);
+                    border-radius: 14px;
                     display: flex; align-items: center; justify-content: center;
-                    font-size: 1.6rem;
+                    font-size: 1.5rem;
                     margin: 0 auto 20px auto;
                 ">🔥</div>
-                <h1 style="
-                    font-family: 'Montserrat', sans-serif;
-                    color: #1A1A1A !important;
-                    font-size: 1.6rem;
+                <h2 style="
+                    color: #323338 !important;
+                    font-size: 1.5rem;
                     font-weight: 700;
-                    letter-spacing: -0.5px;
-                    margin: 0 0 8px 0;
-                ">HellYeah Agency</h1>
-                <p style="color: #AAAAAA !important; font-size: 0.85rem; margin: 0; font-weight: 400;">
-                    Inicia sesión para continuar
+                    margin: 0 0 6px 0;
+                    letter-spacing: -0.3px;
+                ">HellYeah Agency</h2>
+                <p style="color: #676879 !important; font-size: 0.85rem; margin: 0 0 28px 0;">
+                    Bienvenido de vuelta
                 </p>
             </div>
         """, unsafe_allow_html=True)
@@ -234,7 +260,7 @@ def mostrar_login():
         password = st.text_input("", type="password", placeholder="Contraseña")
         st.markdown("<br>", unsafe_allow_html=True)
 
-        if st.button("Continuar →", use_container_width=True):
+        if st.button("Iniciar sesión", use_container_width=True):
             if usuario in USUARIOS and USUARIOS[usuario]["password"] == password:
                 cookies["autenticado"] = "true"
                 cookies["usuario"] = usuario
@@ -245,12 +271,6 @@ def mostrar_login():
             else:
                 st.error("Usuario o contraseña incorrectos.")
 
-        st.markdown("""
-            <p style="text-align:center; color:#CCCCCC !important; font-size:0.75rem; margin-top:20px;">
-                Acceso seguro y privado
-            </p>
-        """, unsafe_allow_html=True)
-
 autenticado = cookies.get("autenticado") == "true"
 
 if not autenticado:
@@ -260,45 +280,49 @@ else:
     rol = cookies.get('rol', '').upper()
 
     st.sidebar.markdown(f"""
-        <div style="padding: 32px 20px 24px 20px;">
-            <div style="display:flex; align-items:center; gap:10px; margin-bottom: 32px;">
+        <div style="padding: 24px 16px 16px 16px;">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom: 24px;">
                 <div style="
-                    width: 32px; height: 32px;
-                    background: #1A1A1A;
-                    border-radius: 8px;
+                    width: 34px; height: 34px;
+                    background: linear-gradient(135deg, #4353FF, #6B5BFF);
+                    border-radius: 10px;
                     display: flex; align-items: center; justify-content: center;
-                    font-size: 1rem;
+                    font-size: 1.1rem;
+                    flex-shrink: 0;
                 ">🔥</div>
                 <div>
-                    <div style="font-family:'Montserrat',sans-serif; color:#1A1A1A !important; font-weight:700; font-size:0.95rem; line-height:1.2;">HellYeah</div>
-                    <div style="color:#AAAAAA !important; font-size:0.65rem; font-weight:600; letter-spacing:1.5px; text-transform:uppercase;">Agency CRM</div>
+                    <div style="color:#323338 !important; font-weight:700; font-size:0.95rem; line-height:1.3;">HellYeah</div>
+                    <div style="color:#676879 !important; font-size:0.65rem; font-weight:600; letter-spacing:1px; text-transform:uppercase;">Agency CRM</div>
                 </div>
             </div>
 
             <div style="
-                background: #F5F5F7;
-                border-radius: 12px;
-                padding: 12px 14px;
-                margin-bottom: 28px;
+                background: #F6F7FB;
+                border-radius: 10px;
+                padding: 10px 12px;
+                margin-bottom: 20px;
                 display: flex;
                 align-items: center;
                 gap: 10px;
+                border: 1px solid #E6E9EF;
             ">
                 <div style="
-                    width: 34px; height: 34px;
-                    background: #1A1A1A;
+                    width: 30px; height: 30px;
+                    background: linear-gradient(135deg, #4353FF, #6B5BFF);
                     border-radius: 50%;
                     display: flex; align-items: center; justify-content: center;
-                    font-size: 0.9rem;
+                    font-size: 0.8rem;
                     flex-shrink: 0;
-                ">👤</div>
+                    color: white;
+                    font-weight: 700;
+                ">{nombre[0] if nombre else 'A'}</div>
                 <div>
-                    <div style="color:#1A1A1A !important; font-weight:600; font-size:0.82rem;">{nombre}</div>
-                    <div style="color:#AAAAAA !important; font-size:0.68rem; font-weight:500;">{rol}</div>
+                    <div style="color:#323338 !important; font-weight:600; font-size:0.82rem;">{nombre}</div>
+                    <div style="color:#676879 !important; font-size:0.68rem;">{rol}</div>
                 </div>
             </div>
 
-            <div style="color:#BBBBBB !important; font-size:0.65rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; margin-bottom: 8px; padding: 0 4px;">NAVEGACIÓN</div>
+            <div style="color:#C5C7D4 !important; font-size:0.65rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; margin-bottom: 6px; padding: 0 8px;">MENÚ</div>
         </div>
     """, unsafe_allow_html=True)
 
@@ -309,13 +333,13 @@ else:
         "💰  Pagos"
     ])
 
-    st.sidebar.markdown("<br>" * 10, unsafe_allow_html=True)
+    st.sidebar.markdown("<br>" * 12, unsafe_allow_html=True)
 
     st.sidebar.markdown("""
-        <div style="height:1px; background:#F0F0F0; margin: 0 20px 16px 20px;"></div>
+        <div style="height:1px; background:#E6E9EF; margin: 0 16px 12px 16px;"></div>
     """, unsafe_allow_html=True)
 
-    if st.sidebar.button("← Cerrar Sesión", use_container_width=True):
+    if st.sidebar.button("🚪  Cerrar Sesión", use_container_width=True):
         cookies["autenticado"] = "false"
         cookies["usuario"] = ""
         cookies["nombre"] = ""

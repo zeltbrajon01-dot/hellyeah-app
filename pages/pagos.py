@@ -3,8 +3,13 @@ from config import get_supabase
 from datetime import date
 
 def mostrar_pagos():
-    st.title("💰 Gestión de Pagos")
-    st.markdown("---")
+    st.markdown("""
+        <div style="margin-bottom: 8px;">
+            <h1 style="color:#323338; font-size:1.6rem; font-weight:700; letter-spacing:-0.3px; margin:0 0 4px 0;">Pagos</h1>
+            <p style="color:#676879; font-size:0.85rem; margin:0;">Gestiona los pagos y finanzas de tu agencia</p>
+        </div>
+        <hr style="border:none; border-top:1px solid #E6E9EF; margin:20px 0 28px 0;">
+    """, unsafe_allow_html=True)
 
     sb = get_supabase()
 
@@ -20,33 +25,30 @@ def mostrar_pagos():
     col1, col2, col3 = st.columns(3)
     with col1:
         st.markdown(f"""
-            <div style="background: linear-gradient(135deg, #2ECC7122, #2ECC7144);
-                border-left: 4px solid #2ECC71; border-radius: 12px; padding: 20px;">
-                <div style="color: #aaa; font-size: 0.85rem;">💵 Total Cobrado</div>
-                <div style="color: white; font-size: 1.8rem; font-weight: bold;">${total_cobrado:,.2f}</div>
+            <div style="background:#FFFFFF; border-radius:12px; padding:20px 24px; border:1px solid #E6E9EF; border-top:3px solid #00C875; box-shadow:0 2px 8px rgba(0,0,0,0.04);">
+                <div style="color:#676879; font-size:0.75rem; font-weight:600; letter-spacing:0.5px; text-transform:uppercase; margin-bottom:8px;">💵 Total Cobrado</div>
+                <div style="color:#00C875; font-size:1.8rem; font-weight:700; letter-spacing:-1px;">${total_cobrado:,.2f}</div>
             </div>
         """, unsafe_allow_html=True)
     with col2:
         st.markdown(f"""
-            <div style="background: linear-gradient(135deg, #F39C1222, #F39C1244);
-                border-left: 4px solid #F39C12; border-radius: 12px; padding: 20px;">
-                <div style="color: #aaa; font-size: 0.85rem;">⏳ Por Cobrar</div>
-                <div style="color: white; font-size: 1.8rem; font-weight: bold;">${total_pendiente:,.2f}</div>
+            <div style="background:#FFFFFF; border-radius:12px; padding:20px 24px; border:1px solid #E6E9EF; border-top:3px solid #FFCB00; box-shadow:0 2px 8px rgba(0,0,0,0.04);">
+                <div style="color:#676879; font-size:0.75rem; font-weight:600; letter-spacing:0.5px; text-transform:uppercase; margin-bottom:8px;">⏳ Por Cobrar</div>
+                <div style="color:#D97706; font-size:1.8rem; font-weight:700; letter-spacing:-1px;">${total_pendiente:,.2f}</div>
             </div>
         """, unsafe_allow_html=True)
     with col3:
         st.markdown(f"""
-            <div style="background: linear-gradient(135deg, #E74C3C22, #E74C3C44);
-                border-left: 4px solid #E74C3C; border-radius: 12px; padding: 20px;">
-                <div style="color: #aaa; font-size: 0.85rem;">🚨 Vencido</div>
-                <div style="color: white; font-size: 1.8rem; font-weight: bold;">${total_vencido:,.2f}</div>
+            <div style="background:#FFFFFF; border-radius:12px; padding:20px 24px; border:1px solid #E6E9EF; border-top:3px solid #E2445C; box-shadow:0 2px 8px rgba(0,0,0,0.04);">
+                <div style="color:#676879; font-size:0.75rem; font-weight:600; letter-spacing:0.5px; text-transform:uppercase; margin-bottom:8px;">🚨 Vencido</div>
+                <div style="color:#E2445C; font-size:1.8rem; font-weight:700; letter-spacing:-1px;">${total_vencido:,.2f}</div>
             </div>
         """, unsafe_allow_html=True)
 
     st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown("---")
+    st.markdown("<hr style='border:none; border-top:1px solid #E6E9EF;'>", unsafe_allow_html=True)
 
-    tab1, tab2 = st.tabs(["📋 Lista de Pagos", "➕ Registrar Pago"])
+    tab1, tab2 = st.tabs(["Lista de Pagos", "Registrar Pago"])
 
     with tab1:
         filtro = st.selectbox("Filtrar por estado", ["Todos", "Pagado", "Pendiente", "Vencido"])
@@ -57,25 +59,33 @@ def mostrar_pagos():
             pagos = sb.table("pagos").select("*, clientes(empresa), proyectos(nombre)").eq("estado", filtro).order("id", desc=True).execute().data
 
         if not pagos:
-            st.info("No hay pagos registrados todavía.")
+            st.markdown("""
+                <div style="background:#FFFFFF; border-radius:12px; padding:48px; text-align:center; border:1px solid #E6E9EF;">
+                    <div style="font-size:2.5rem; margin-bottom:12px;">💰</div>
+                    <p style="color:#323338; font-weight:600; margin:0 0 4px 0;">No hay pagos todavía</p>
+                    <p style="color:#676879; font-size:0.85rem; margin:0;">Registra tu primer pago desde la pestaña de arriba</p>
+                </div>
+            """, unsafe_allow_html=True)
         else:
             for pago in pagos:
                 empresa = pago["clientes"]["empresa"] if pago.get("clientes") else "Sin cliente"
                 proyecto = pago["proyectos"]["nombre"] if pago.get("proyectos") else "Sin proyecto"
+                color_estado = "#00C875" if pago["estado"] == "Pagado" else "#E2445C" if pago["estado"] == "Vencido" else "#FFCB00"
                 icono = "✅" if pago["estado"] == "Pagado" else "🚨" if pago["estado"] == "Vencido" else "⏳"
 
                 with st.expander(f"{icono} {pago['concepto']} — {empresa} — ${pago['monto']:,.2f}"):
                     col1, col2 = st.columns(2)
                     with col1:
-                        st.write(f"**Cliente:** {empresa}")
-                        st.write(f"**Proyecto:** {proyecto}")
-                        st.write(f"**Concepto:** {pago['concepto']}")
+                        st.markdown(f"<p style='margin:4px 0;'><b>Cliente:</b> {empresa}</p>", unsafe_allow_html=True)
+                        st.markdown(f"<p style='margin:4px 0;'><b>Proyecto:</b> {proyecto}</p>", unsafe_allow_html=True)
+                        st.markdown(f"<p style='margin:4px 0;'><b>Concepto:</b> {pago['concepto']}</p>", unsafe_allow_html=True)
                     with col2:
-                        st.write(f"**Monto:** ${pago['monto']:,.2f}")
-                        st.write(f"**Estado:** {pago['estado']}")
-                        st.write(f"**Fecha emisión:** {pago['fecha_emision']}")
-                        st.write(f"**Fecha pago:** {pago['fecha_pago'] or 'Pendiente'}")
+                        st.markdown(f"<p style='margin:4px 0;'><b>Monto:</b> ${pago['monto']:,.2f}</p>", unsafe_allow_html=True)
+                        st.markdown(f"<p style='margin:4px 0;'><b>Estado:</b> <span style='color:{color_estado}; font-weight:600;'>{pago['estado']}</span></p>", unsafe_allow_html=True)
+                        st.markdown(f"<p style='margin:4px 0;'><b>Emisión:</b> {pago['fecha_emision']}</p>", unsafe_allow_html=True)
+                        st.markdown(f"<p style='margin:4px 0;'><b>Pago:</b> {pago['fecha_pago'] or 'Pendiente'}</p>", unsafe_allow_html=True)
 
+                    st.markdown("<br>", unsafe_allow_html=True)
                     col_a, col_b, col_c, col_d = st.columns(4)
                     with col_a:
                         if st.button("✅ Pagado", key=f"pagado_{pago['id']}"):
@@ -95,8 +105,8 @@ def mostrar_pagos():
                             st.rerun()
 
                     if st.session_state.get(f"editando_pago_{pago['id']}", False):
+                        st.markdown("<hr style='border:none; border-top:1px solid #E6E9EF;'>", unsafe_allow_html=True)
                         with st.form(key=f"form_edit_pago_{pago['id']}"):
-                            st.markdown("### ✏️ Editar Pago")
                             col1, col2 = st.columns(2)
                             with col1:
                                 nuevo_concepto = st.text_input("Concepto", value=pago['concepto'])
@@ -125,7 +135,7 @@ def mostrar_pagos():
                                 st.rerun()
 
     with tab2:
-        st.subheader("➕ Registrar Nuevo Pago")
+        st.markdown("<p style='font-weight:700; color:#323338; font-size:1rem; margin-bottom:20px;'>Nuevo Pago</p>", unsafe_allow_html=True)
 
         clientes = sb.table("clientes").select("id, nombre, empresa").execute().data
         proyectos = sb.table("proyectos").select("id, nombre").execute().data
@@ -148,9 +158,9 @@ def mostrar_pagos():
                 fecha_emision = st.date_input("Fecha emisión", value=date.today())
                 fecha_pago = st.date_input("Fecha pago", value=date.today())
 
-            st.markdown("---")
+            st.markdown("<br>", unsafe_allow_html=True)
 
-            if st.button("💾 Guardar Pago", use_container_width=True):
+            if st.button("Guardar Pago", use_container_width=True):
                 if concepto == "":
                     st.error("⚠️ El concepto es obligatorio.")
                 else:
