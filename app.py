@@ -13,140 +13,167 @@ st.set_page_config(
 
 st.markdown("""
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
+
         [data-testid="stSidebarNav"] {display: none;}
         #MainMenu {visibility: hidden;}
         footer {visibility: hidden;}
         header {visibility: hidden;}
 
+        * { font-family: 'DM Sans', sans-serif; }
+
         .stApp {
-            background-color: #f4f6f9;
+            background: #F7F8FC;
         }
 
         section[data-testid="stSidebar"] {
-            background: #1a2332 !important;
-            border-right: none !important;
+            background: #0F1117 !important;
+            border-right: 1px solid #1E2130 !important;
+            width: 260px !important;
         }
 
-        section[data-testid="stSidebar"] * {
-            color: #ffffff !important;
+        section[data-testid="stSidebar"] > div {
+            padding: 0 !important;
         }
 
-        section[data-testid="stSidebar"] .stRadio > div > label {
-            background-color: transparent !important;
+        .stRadio > div {
+            gap: 4px !important;
+        }
+
+        .stRadio > div > label {
+            background: transparent !important;
             border: none !important;
-            border-radius: 8px !important;
-            padding: 10px 15px !important;
-            color: #adb5bd !important;
+            border-radius: 10px !important;
+            padding: 12px 20px !important;
+            color: #8B8FA8 !important;
             font-weight: 500 !important;
-            transition: all 0.2s !important;
+            font-size: 0.9rem !important;
+            transition: all 0.2s ease !important;
+            margin: 2px 8px !important;
+            display: flex !important;
+            align-items: center !important;
         }
 
-        section[data-testid="stSidebar"] .stRadio > div > label:hover {
-            background-color: #2d3f55 !important;
-            color: #ffffff !important;
+        .stRadio > div > label:hover {
+            background: #1E2130 !important;
+            color: #FFFFFF !important;
         }
 
-        section[data-testid="stSidebar"] .stRadio > div > label[data-checked="true"] {
-            background-color: #2d3f55 !important;
-            color: #ffffff !important;
-            border-left: 3px solid #4A90D9 !important;
+        div[data-testid="stSidebar"] .stRadio label[data-checked="true"],
+        div[data-testid="stSidebar"] .stRadio input:checked + div {
+            background: linear-gradient(135deg, #6366F1, #8B5CF6) !important;
+            color: #FFFFFF !important;
         }
 
         .stButton > button {
-            background: #4A90D9;
-            color: #ffffff;
-            font-weight: 600;
-            border: none;
-            border-radius: 6px;
-            padding: 10px 20px;
-            font-size: 0.9rem;
-            transition: all 0.2s ease;
+            background: linear-gradient(135deg, #6366F1, #8B5CF6) !important;
+            color: #ffffff !important;
+            font-weight: 600 !important;
+            border: none !important;
+            border-radius: 10px !important;
+            padding: 12px 24px !important;
+            font-size: 0.9rem !important;
+            transition: all 0.3s ease !important;
+            font-family: 'DM Sans', sans-serif !important;
+            letter-spacing: 0.3px !important;
         }
 
         .stButton > button:hover {
-            background: #357abd;
-            box-shadow: 0 2px 8px rgba(74,144,217,0.4);
+            transform: translateY(-2px) !important;
+            box-shadow: 0 8px 25px rgba(99,102,241,0.4) !important;
         }
 
         .stTextInput > div > div > input,
         .stTextArea > div > div > textarea,
         .stNumberInput > div > div > input {
-            background-color: #ffffff;
-            border: 1px solid #dee2e6;
-            border-radius: 6px;
-            color: #333333;
+            background: #FFFFFF !important;
+            border: 1.5px solid #E5E7EB !important;
+            border-radius: 10px !important;
+            color: #111827 !important;
+            font-family: 'DM Sans', sans-serif !important;
+            padding: 10px 14px !important;
+            transition: all 0.2s !important;
         }
 
         .stTextInput > div > div > input:focus,
         .stTextArea > div > div > textarea:focus {
-            border-color: #4A90D9;
-            box-shadow: 0 0 0 2px rgba(74,144,217,0.2);
+            border-color: #6366F1 !important;
+            box-shadow: 0 0 0 3px rgba(99,102,241,0.15) !important;
         }
 
         .stSelectbox > div > div {
-            background-color: #ffffff;
-            border: 1px solid #dee2e6;
-            border-radius: 6px;
-            color: #333333;
+            background: #FFFFFF !important;
+            border: 1.5px solid #E5E7EB !important;
+            border-radius: 10px !important;
+            color: #111827 !important;
         }
 
         .stTabs [data-baseweb="tab-list"] {
-            background-color: #ffffff;
-            border-radius: 8px;
-            padding: 4px;
-            gap: 4px;
-            border: 1px solid #dee2e6;
+            background: #FFFFFF !important;
+            border-radius: 12px !important;
+            padding: 6px !important;
+            gap: 4px !important;
+            border: 1px solid #E5E7EB !important;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05) !important;
         }
 
         .stTabs [data-baseweb="tab"] {
-            background-color: transparent;
-            border-radius: 6px;
-            color: #666;
-            font-weight: 600;
+            background: transparent !important;
+            border-radius: 8px !important;
+            color: #6B7280 !important;
+            font-weight: 600 !important;
+            font-family: 'DM Sans', sans-serif !important;
         }
 
         .stTabs [aria-selected="true"] {
-            background: #4A90D9 !important;
+            background: linear-gradient(135deg, #6366F1, #8B5CF6) !important;
             color: #ffffff !important;
         }
 
         .streamlit-expanderHeader {
-            background-color: #ffffff;
-            border: 1px solid #dee2e6;
-            border-radius: 8px;
-            color: #333333;
+            background: #FFFFFF !important;
+            border: 1px solid #E5E7EB !important;
+            border-radius: 12px !important;
+            color: #111827 !important;
+            font-weight: 600 !important;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05) !important;
         }
 
         .streamlit-expanderContent {
-            background-color: #f8f9fa;
-            border: 1px solid #dee2e6;
-            border-radius: 0 0 8px 8px;
+            background: #FAFAFA !important;
+            border: 1px solid #E5E7EB !important;
+            border-top: none !important;
+            border-radius: 0 0 12px 12px !important;
         }
 
         [data-testid="stMetric"] {
-            background-color: #ffffff;
-            border: 1px solid #dee2e6;
-            border-radius: 10px;
-            padding: 15px;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+            background: #FFFFFF !important;
+            border: 1px solid #E5E7EB !important;
+            border-radius: 14px !important;
+            padding: 20px !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06) !important;
         }
 
-        hr {
-            border-color: #dee2e6;
-        }
+        hr { border-color: #1E2130 !important; }
 
         .block-container {
-            padding-left: 2rem;
-            padding-right: 2rem;
-            padding-top: 1.5rem;
+            padding-left: 2.5rem !important;
+            padding-right: 2.5rem !important;
+            padding-top: 2rem !important;
         }
 
         h1, h2, h3, h4 {
-            color: #1a2332 !important;
+            font-family: 'Syne', sans-serif !important;
+            color: #111827 !important;
+            font-weight: 700 !important;
         }
 
         p, label, div {
-            color: #333333;
+            color: #374151 !important;
+        }
+
+        .stMarkdown p {
+            color: #374151 !important;
         }
     </style>
 """, unsafe_allow_html=True)
@@ -168,28 +195,56 @@ USUARIOS = {
 }
 
 def mostrar_login():
-    st.markdown("<br><br>", unsafe_allow_html=True)
+    st.markdown("""
+        <style>
+            .stApp { background: linear-gradient(135deg, #0F1117 0%, #1a1f35 50%, #0F1117 100%) !important; }
+        </style>
+    """, unsafe_allow_html=True)
 
-    col1, col2, col3 = st.columns([1, 0.5, 1])
+    st.markdown("<br><br><br>", unsafe_allow_html=True)
+
+    col1, col2, col3 = st.columns([1, 0.55, 1])
     with col2:
         st.markdown("""
             <div style="
-                background: white;
-                border-radius: 12px;
-                padding: 40px;
-                box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+                background: rgba(255,255,255,0.03);
+                border: 1px solid rgba(255,255,255,0.08);
+                border-radius: 20px;
+                padding: 48px 40px;
+                backdrop-filter: blur(20px);
                 text-align: center;
+                margin-bottom: 24px;
             ">
-                <h2 style="color:#1a2332; margin-bottom:5px;">🔥 HellYeah Agency</h2>
-                <p style="color:#888; margin-bottom:25px;">Inicia sesión para continuar</p>
+                <div style="font-size: 3rem; margin-bottom: 8px;">🔥</div>
+                <h1 style="
+                    font-family: 'Syne', sans-serif;
+                    color: #FFFFFF !important;
+                    font-size: 1.8rem;
+                    font-weight: 800;
+                    margin: 0 0 6px 0;
+                ">HellYeah Agency</h1>
+                <p style="color: #6B7280 !important; font-size: 0.9rem; margin: 0 0 32px 0;">
+                    Panel de administración
+                </p>
             </div>
         """, unsafe_allow_html=True)
 
-        usuario = st.text_input("Usuario", placeholder="Tu usuario")
-        password = st.text_input("Contraseña", type="password", placeholder="Tu contraseña")
+        st.markdown("""
+            <style>
+                .login-input .stTextInput > div > div > input {
+                    background: rgba(255,255,255,0.05) !important;
+                    border: 1px solid rgba(255,255,255,0.1) !important;
+                    color: white !important;
+                    border-radius: 10px !important;
+                }
+            </style>
+        """, unsafe_allow_html=True)
+
+        usuario = st.text_input("", placeholder="👤 Usuario")
+        password = st.text_input("", type="password", placeholder="🔒 Contraseña")
         st.markdown("<br>", unsafe_allow_html=True)
 
-        if st.button("Ingresar →", use_container_width=True):
+        if st.button("Iniciar sesión →", use_container_width=True):
             if usuario in USUARIOS and USUARIOS[usuario]["password"] == password:
                 cookies["autenticado"] = "true"
                 cookies["usuario"] = usuario
@@ -200,57 +255,67 @@ def mostrar_login():
             else:
                 st.error("Usuario o contraseña incorrectos.")
 
-        st.markdown("""
-            <p style="text-align:center; color:#aaa; font-size:0.75rem; margin-top:15px;">
-                🔒 Acceso seguro y privado
-            </p>
-        """, unsafe_allow_html=True)
-
 autenticado = cookies.get("autenticado") == "true"
 
 if not autenticado:
     mostrar_login()
 else:
-    try:
-        from PIL import Image
-        import os
-        logo_paths = ["logo.jpeg", "/mount/src/hellyeah-app/logo.jpeg"]
-        for path in logo_paths:
-            if os.path.exists(path):
-                logo = Image.open(path)
-                st.sidebar.image(logo, use_container_width=True)
-                break
-        else:
-            st.sidebar.markdown("<h2 style='color:#ffffff; text-align:center;'>🔥 HellYeah</h2>", unsafe_allow_html=True)
-    except:
-        st.sidebar.markdown("<h2 style='color:#ffffff; text-align:center;'>🔥 HellYeah</h2>", unsafe_allow_html=True)
+    st.sidebar.markdown("""
+        <div style="padding: 28px 20px 16px 20px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+                <span style="font-size:1.8rem;">🔥</span>
+                <div>
+                    <div style="font-family:'Syne',sans-serif; color:#FFFFFF; font-weight:800; font-size:1.1rem; line-height:1.2;">HellYeah</div>
+                    <div style="color:#6366F1; font-size:0.75rem; font-weight:600; letter-spacing:1px;">AGENCY CRM</div>
+                </div>
+            </div>
+        </div>
+        <div style="height:1px; background:linear-gradient(90deg, #6366F1, transparent); margin: 0 20px 20px 20px;"></div>
+    """, unsafe_allow_html=True)
 
-    st.sidebar.markdown("---")
+    nombre = cookies.get('nombre', '')
+    rol = cookies.get('rol', '').upper()
 
     st.sidebar.markdown(f"""
         <div style="
-            background: #2d3f55;
-            border-radius: 8px;
-            padding: 10px 15px;
-            margin-bottom: 10px;
+            margin: 0 12px 20px 12px;
+            background: #1E2130;
+            border-radius: 12px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
         ">
-            <div style="color: #adb5bd; font-size: 0.75rem;">Conectado como</div>
-            <div style="color: white; font-weight: bold;">👤 {cookies.get('nombre')}</div>
-            <div style="color: #4A90D9; font-size: 0.8rem;">🛡️ {cookies.get('rol', '').upper()}</div>
+            <div style="
+                width: 38px; height: 38px;
+                background: linear-gradient(135deg, #6366F1, #8B5CF6);
+                border-radius: 50%;
+                display: flex; align-items: center; justify-content: center;
+                font-size: 1rem;
+                flex-shrink: 0;
+            ">👤</div>
+            <div>
+                <div style="color:#FFFFFF; font-weight:600; font-size:0.85rem;">{nombre}</div>
+                <div style="color:#6366F1; font-size:0.7rem; font-weight:600;">{rol}</div>
+            </div>
+        </div>
+
+        <div style="padding: 0 12px; margin-bottom: 8px;">
+            <div style="color:#4B5563; font-size:0.7rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; padding: 0 8px; margin-bottom: 8px;">MENÚ PRINCIPAL</div>
         </div>
     """, unsafe_allow_html=True)
 
-    st.sidebar.markdown("---")
-
-    menu = st.sidebar.radio("Navegación", [
-        "📊 Panel de control",
-        "👥 Clientes",
-        "📁 Proyectos",
-        "💰 Pagos"
+    menu = st.sidebar.radio("", [
+        "📊  Panel de control",
+        "👥  Clientes",
+        "📁  Proyectos",
+        "💰  Pagos"
     ])
 
-    st.sidebar.markdown("---")
-    if st.sidebar.button("🚪 Cerrar Sesión", use_container_width=True):
+    st.sidebar.markdown("<br>" * 8, unsafe_allow_html=True)
+    st.sidebar.markdown("<div style='height:1px; background:#1E2130; margin: 0 12px 16px 12px;'></div>", unsafe_allow_html=True)
+
+    if st.sidebar.button("🚪  Cerrar Sesión", use_container_width=True):
         cookies["autenticado"] = "false"
         cookies["usuario"] = ""
         cookies["nombre"] = ""
@@ -258,11 +323,11 @@ else:
         cookies.save()
         st.rerun()
 
-    if menu == "📊 Panel de control":
+    if "Panel de control" in menu:
         dashboard.mostrar_dashboard()
-    elif menu == "👥 Clientes":
+    elif "Clientes" in menu:
         clientes.mostrar_clientes()
-    elif menu == "📁 Proyectos":
+    elif "Proyectos" in menu:
         proyectos.mostrar_proyectos()
-    elif menu == "💰 Pagos":
+    elif "Pagos" in menu:
         pagos.mostrar_pagos()
