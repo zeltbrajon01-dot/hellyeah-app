@@ -36,6 +36,10 @@ st.markdown("""
             padding: 0 !important;
         }
 
+        section[data-testid="stSidebar"] * {
+            color: #FFFFFF !important;
+        }
+
         .stRadio > div {
             gap: 4px !important;
         }
@@ -50,18 +54,10 @@ st.markdown("""
             font-size: 0.9rem !important;
             transition: all 0.2s ease !important;
             margin: 2px 8px !important;
-            display: flex !important;
-            align-items: center !important;
         }
 
         .stRadio > div > label:hover {
             background: #1E2130 !important;
-            color: #FFFFFF !important;
-        }
-
-        div[data-testid="stSidebar"] .stRadio label[data-checked="true"],
-        div[data-testid="stSidebar"] .stRadio input:checked + div {
-            background: linear-gradient(135deg, #6366F1, #8B5CF6) !important;
             color: #FFFFFF !important;
         }
 
@@ -229,17 +225,6 @@ def mostrar_login():
             </div>
         """, unsafe_allow_html=True)
 
-        st.markdown("""
-            <style>
-                .login-input .stTextInput > div > div > input {
-                    background: rgba(255,255,255,0.05) !important;
-                    border: 1px solid rgba(255,255,255,0.1) !important;
-                    color: white !important;
-                    border-radius: 10px !important;
-                }
-            </style>
-        """, unsafe_allow_html=True)
-
         usuario = st.text_input("", placeholder="👤 Usuario")
         password = st.text_input("", type="password", placeholder="🔒 Contraseña")
         st.markdown("<br>", unsafe_allow_html=True)
@@ -299,9 +284,8 @@ else:
                 <div style="color:#6366F1; font-size:0.7rem; font-weight:600;">{rol}</div>
             </div>
         </div>
-
         <div style="padding: 0 12px; margin-bottom: 8px;">
-            <div style="color:#4B5563; font-size:0.7rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; padding: 0 8px; margin-bottom: 8px;">MENÚ PRINCIPAL</div>
+            <div style="color:#6B7280; font-size:0.7rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; padding: 0 8px; margin-bottom: 8px;">MENÚ PRINCIPAL</div>
         </div>
     """, unsafe_allow_html=True)
 
