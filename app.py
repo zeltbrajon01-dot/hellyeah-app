@@ -13,14 +13,14 @@ st.set_page_config(
 
 st.markdown("""
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
 
         [data-testid="stSidebarNav"] {display: none;}
         #MainMenu {visibility: hidden;}
         footer {visibility: hidden;}
         header {visibility: hidden;}
 
-        * { font-family: 'DM Sans', sans-serif; }
+        * { font-family: 'Montserrat', sans-serif; }
 
         .stApp {
             background: #F7F8FC;
@@ -70,7 +70,7 @@ st.markdown("""
             padding: 12px 24px !important;
             font-size: 0.9rem !important;
             transition: all 0.3s ease !important;
-            font-family: 'DM Sans', sans-serif !important;
+            font-family: 'Montserrat', sans-serif !important;
             letter-spacing: 0.3px !important;
         }
 
@@ -86,7 +86,7 @@ st.markdown("""
             border: 1.5px solid #E5E7EB !important;
             border-radius: 10px !important;
             color: #111827 !important;
-            font-family: 'DM Sans', sans-serif !important;
+            font-family: 'Montserrat', sans-serif !important;
             padding: 10px 14px !important;
             transition: all 0.2s !important;
         }
@@ -118,7 +118,7 @@ st.markdown("""
             border-radius: 8px !important;
             color: #6B7280 !important;
             font-weight: 600 !important;
-            font-family: 'DM Sans', sans-serif !important;
+            font-family: 'Montserrat', sans-serif !important;
         }
 
         .stTabs [aria-selected="true"] {
@@ -159,7 +159,7 @@ st.markdown("""
         }
 
         h1, h2, h3, h4 {
-            font-family: 'Syne', sans-serif !important;
+            font-family: 'Montserrat', sans-serif !important;
             color: #111827 !important;
             font-weight: 700 !important;
         }
@@ -213,7 +213,7 @@ def mostrar_login():
             ">
                 <div style="font-size: 3rem; margin-bottom: 8px;">🔥</div>
                 <h1 style="
-                    font-family: 'Syne', sans-serif;
+                    font-family: 'Montserrat', sans-serif;
                     color: #FFFFFF !important;
                     font-size: 1.8rem;
                     font-weight: 800;
@@ -250,7 +250,7 @@ else:
             <div style="display:flex; align-items:center; gap:10px;">
                 <span style="font-size:1.8rem;">🔥</span>
                 <div>
-                    <div style="font-family:'Syne',sans-serif; color:#FFFFFF; font-weight:800; font-size:1.1rem; line-height:1.2;">HellYeah</div>
+                    <div style="font-family:'Montserrat',sans-serif; color:#FFFFFF; font-weight:800; font-size:1.1rem; line-height:1.2;">HellYeah</div>
                     <div style="color:#6366F1; font-size:0.75rem; font-weight:600; letter-spacing:1px;">AGENCY CRM</div>
                 </div>
             </div>
