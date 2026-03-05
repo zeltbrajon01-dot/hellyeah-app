@@ -20,14 +20,12 @@ def card_metrica(titulo, valor, icono, color):
 
 def mostrar_dashboard():
     st.markdown("""
-        <h1 style="
-            background: linear-gradient(90deg, #C6FF00, #ffffff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-size: 2.5rem;
-            font-weight: bold;
-        ">🔥 HellYeah Agency — Panel de Control</h1>
-    """, unsafe_allow_html=True)
+    <h1 style="
+        color: #111827;
+        font-size: 2.5rem;
+        font-weight: bold;
+    ">🔥 HellYeah Agency — Panel de Control</h1>
+""", unsafe_allow_html=True)
     st.markdown("---")
 
     sb = get_supabase()
