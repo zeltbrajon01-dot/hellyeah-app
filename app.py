@@ -65,12 +65,6 @@ st.markdown("""
             color: #323338 !important;
         }
 
-        div[data-testid="stSidebar"] .stRadio label[data-checked="true"] {
-            background: #EEF0FF !important;
-            color: #4353FF !important;
-            font-weight: 600 !important;
-        }
-
         .stButton > button {
             background: #4353FF !important;
             color: #FFFFFF !important;
@@ -158,17 +152,7 @@ st.markdown("""
             border-top: none !important;
             border-radius: 0 0 10px 10px !important;
         }
-[title] {
-            pointer-events: none !important;
-        }
 
-        [data-testid="stSidebar"] [title] {
-            display: none !important;
-        }
-
-        tooltip, [role="tooltip"] {
-            display: none !important;
-        }
         hr {
             border: none !important;
             border-top: 1px solid #E6E9EF !important;
@@ -289,52 +273,29 @@ else:
     nombre = cookies.get('nombre', '')
     rol = cookies.get('rol', '').upper()
 
-    st.sidebar.markdown(f"""
-        <div style="padding: 24px 16px 16px 16px;">
-            <div style="display:flex; align-items:center; gap:10px; margin-bottom: 24px;">
+    st.sidebar.markdown("""
+        <div style="padding:24px 16px 8px 16px;">
+            <div style="display:flex; align-items:center; gap:10px;">
                 <div style="
-                    width: 34px; height: 34px;
-                    background: linear-gradient(135deg, #4353FF, #6B5BFF);
-                    border-radius: 10px;
-                    display: flex; align-items: center; justify-content: center;
-                    font-size: 1.1rem;
-                    flex-shrink: 0;
+                    width:34px; height:34px;
+                    background:linear-gradient(135deg,#4353FF,#6B5BFF);
+                    border-radius:10px;
+                    display:flex; align-items:center; justify-content:center;
+                    font-size:1.1rem;
                 ">🔥</div>
                 <div>
-                    <div style="color:#323338 !important; font-weight:700; font-size:0.95rem; line-height:1.3;">HellYeah</div>
+                    <div style="color:#323338 !important; font-weight:700; font-size:0.95rem;">HellYeah</div>
                     <div style="color:#676879 !important; font-size:0.65rem; font-weight:600; letter-spacing:1px; text-transform:uppercase;">Agency CRM</div>
                 </div>
             </div>
-
-            <div style="
-                background: #F6F7FB;
-                border-radius: 10px;
-                padding: 10px 12px;
-                margin-bottom: 20px;
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                border: 1px solid #E6E9EF;
-            ">
-                <div style="
-                    width: 30px; height: 30px;
-                    background: linear-gradient(135deg, #4353FF, #6B5BFF);
-                    border-radius: 50%;
-                    display: flex; align-items: center; justify-content: center;
-                    font-size: 0.8rem;
-                    flex-shrink: 0;
-                    color: white;
-                    font-weight: 700;
-                ">{nombre[0] if nombre else 'A'}</div>
-                <div>
-                    <div style="color:#323338 !important; font-weight:600; font-size:0.82rem;">{nombre}</div>
-                    <div style="color:#676879 !important; font-size:0.68rem;">{rol}</div>
-                </div>
-            </div>
-
-            <div style="color:#C5C7D4 !important; font-size:0.65rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; margin-bottom: 6px; padding: 0 8px;">MENÚ</div>
         </div>
+        <hr style="border:none; border-top:1px solid #E6E9EF; margin:12px 16px;">
     """, unsafe_allow_html=True)
+
+    st.sidebar.markdown(f"👤 **{nombre}**")
+    st.sidebar.markdown(f"<span style='color:#4353FF; font-size:0.75rem; font-weight:600;'>{rol}</span>", unsafe_allow_html=True)
+    st.sidebar.markdown("<hr style='border:none; border-top:1px solid #E6E9EF;'>", unsafe_allow_html=True)
+    st.sidebar.markdown("<p style='color:#C5C7D4; font-size:0.65rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; padding:0 8px;'>MENÚ</p>", unsafe_allow_html=True)
 
     menu = st.sidebar.radio("", [
         "📊  Panel de control",
@@ -344,10 +305,7 @@ else:
     ])
 
     st.sidebar.markdown("<br>" * 12, unsafe_allow_html=True)
-
-    st.sidebar.markdown("""
-        <div style="height:1px; background:#E6E9EF; margin: 0 16px 12px 16px;"></div>
-    """, unsafe_allow_html=True)
+    st.sidebar.markdown("<hr style='border:none; border-top:1px solid #E6E9EF;'>", unsafe_allow_html=True)
 
     if st.sidebar.button("🚪  Cerrar Sesión", use_container_width=True):
         cookies["autenticado"] = "false"
