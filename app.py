@@ -211,7 +211,7 @@ def mostrar_login():
                 text-align: center;
                 margin-bottom: 24px;
             ">
-                <div style="font-size: 3rem; margin-bottom: 8px;">🔥</div>
+                "><img src='https://raw.githubusercontent.com/zeltbrajon01-dot/hellyeah-app/master/logo.jpeg' style='width:100%; height:100%; object-fit:cover; border-radius:10px;'></div>
                 <h1 style="
                     font-family: 'Montserrat', sans-serif;
                     color: #FFFFFF !important;
