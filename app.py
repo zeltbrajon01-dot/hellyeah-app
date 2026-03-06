@@ -22,154 +22,148 @@ st.markdown("""
 
         * { font-family: 'Montserrat', sans-serif; }
 
-        .stApp {
-            background: #F7F8FC;
-        }
+        .stApp { background: #F6F7FB; }
 
         section[data-testid="stSidebar"] {
-            background: #0F1117 !important;
-            border-right: 1px solid #1E2130 !important;
-            width: 260px !important;
-        }
-
-        section[data-testid="stSidebar"] > div {
-            padding: 0 !important;
+            background: #FFFFFF !important;
+            border-right: 1px solid #E6E9EF !important;
+            min-width: 230px !important;
+            max-width: 230px !important;
         }
 
         section[data-testid="stSidebar"] * {
-            color: #FFFFFF !important;
+            color: #323338 !important;
         }
 
-        .stRadio > div {
-            gap: 4px !important;
+        section[data-testid="stSidebar"] > div {
+            padding-top: 0 !important;
         }
+
+        .stRadio > div { gap: 2px !important; }
 
         .stRadio > div > label {
             background: transparent !important;
             border: none !important;
-            border-radius: 10px !important;
-            padding: 12px 20px !important;
-            color: #FFFFFF !important;
+            border-radius: 8px !important;
+            padding: 9px 14px !important;
+            color: #676879 !important;
             font-weight: 500 !important;
-            font-size: 0.9rem !important;
-            transition: all 0.2s ease !important;
-            margin: 2px 8px !important;
+            font-size: 0.84rem !important;
+            transition: all 0.15s ease !important;
+            margin: 1px 6px !important;
         }
 
         .stRadio > div > label:hover {
-            background: #1E2130 !important;
-            color: #FFFFFF !important;
+            background: #F0F0F5 !important;
+            color: #323338 !important;
         }
 
         .stButton > button {
-            background: linear-gradient(135deg, #6366F1, #8B5CF6) !important;
-            color: #ffffff !important;
+            background: #4353FF !important;
+            color: #FFFFFF !important;
             font-weight: 600 !important;
             border: none !important;
-            border-radius: 10px !important;
-            padding: 12px 24px !important;
-            font-size: 0.9rem !important;
-            transition: all 0.3s ease !important;
+            border-radius: 8px !important;
+            padding: 10px 20px !important;
+            font-size: 0.84rem !important;
+            transition: all 0.2s ease !important;
             font-family: 'Montserrat', sans-serif !important;
-            letter-spacing: 0.3px !important;
         }
 
         .stButton > button:hover {
-            transform: translateY(-2px) !important;
-            box-shadow: 0 8px 25px rgba(99,102,241,0.4) !important;
+            background: #3342CC !important;
+            box-shadow: 0 4px 12px rgba(67,83,255,0.3) !important;
+            transform: translateY(-1px) !important;
         }
 
         .stTextInput > div > div > input,
         .stTextArea > div > div > textarea,
         .stNumberInput > div > div > input {
             background: #FFFFFF !important;
-            border: 1.5px solid #E5E7EB !important;
-            border-radius: 10px !important;
-            color: #111827 !important;
+            border: 1px solid #C5C7D4 !important;
+            border-radius: 8px !important;
+            color: #323338 !important;
             font-family: 'Montserrat', sans-serif !important;
-            padding: 10px 14px !important;
-            transition: all 0.2s !important;
+            font-size: 0.85rem !important;
+            padding: 9px 12px !important;
         }
 
         .stTextInput > div > div > input:focus,
         .stTextArea > div > div > textarea:focus {
-            border-color: #6366F1 !important;
-            box-shadow: 0 0 0 3px rgba(99,102,241,0.15) !important;
+            border-color: #4353FF !important;
+            box-shadow: 0 0 0 2px rgba(67,83,255,0.15) !important;
         }
 
         .stSelectbox > div > div {
             background: #FFFFFF !important;
-            border: 1.5px solid #E5E7EB !important;
-            border-radius: 10px !important;
-            color: #111827 !important;
+            border: 1px solid #C5C7D4 !important;
+            border-radius: 8px !important;
+            color: #323338 !important;
         }
 
         .stTabs [data-baseweb="tab-list"] {
-            background: #FFFFFF !important;
-            border-radius: 12px !important;
-            padding: 6px !important;
-            gap: 4px !important;
-            border: 1px solid #E5E7EB !important;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.05) !important;
+            background: transparent !important;
+            border-bottom: 2px solid #E6E9EF !important;
+            border-radius: 0 !important;
+            padding: 0 !important;
+            gap: 0 !important;
         }
 
         .stTabs [data-baseweb="tab"] {
             background: transparent !important;
-            border-radius: 8px !important;
-            color: #6B7280 !important;
+            border-radius: 0 !important;
+            color: #676879 !important;
             font-weight: 600 !important;
-            font-family: 'Montserrat', sans-serif !important;
+            font-size: 0.85rem !important;
+            padding: 10px 20px !important;
+            border-bottom: 2px solid transparent !important;
+            margin-bottom: -2px !important;
         }
 
         .stTabs [aria-selected="true"] {
-            background: linear-gradient(135deg, #6366F1, #8B5CF6) !important;
-            color: #ffffff !important;
+            background: transparent !important;
+            color: #4353FF !important;
+            border-bottom: 2px solid #4353FF !important;
         }
 
         .streamlit-expanderHeader {
             background: #FFFFFF !important;
-            border: 1px solid #E5E7EB !important;
-            border-radius: 12px !important;
-            color: #111827 !important;
+            border: 1px solid #E6E9EF !important;
+            border-radius: 10px !important;
+            color: #323338 !important;
             font-weight: 600 !important;
             box-shadow: 0 1px 4px rgba(0,0,0,0.05) !important;
         }
 
         .streamlit-expanderContent {
-            background: #FAFAFA !important;
-            border: 1px solid #E5E7EB !important;
+            background: #FAFBFF !important;
+            border: 1px solid #E6E9EF !important;
             border-top: none !important;
-            border-radius: 0 0 12px 12px !important;
+            border-radius: 0 0 10px 10px !important;
         }
 
-        [data-testid="stMetric"] {
-            background: #FFFFFF !important;
-            border: 1px solid #E5E7EB !important;
-            border-radius: 14px !important;
-            padding: 20px !important;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06) !important;
+        hr {
+            border: none !important;
+            border-top: 1px solid #E6E9EF !important;
         }
-
-        hr { border-color: #1E2130 !important; }
 
         .block-container {
             padding-left: 2.5rem !important;
             padding-right: 2.5rem !important;
             padding-top: 2rem !important;
+            max-width: 1400px !important;
         }
 
         h1, h2, h3, h4 {
             font-family: 'Montserrat', sans-serif !important;
-            color: #111827 !important;
+            color: #323338 !important;
             font-weight: 700 !important;
+            letter-spacing: -0.3px !important;
         }
 
-        p, label, div {
-            color: #374151 !important;
-        }
-
-        .stMarkdown p {
-            color: #374151 !important;
+        p, span, div, label {
+            color: #323338 !important;
+            font-family: 'Montserrat', sans-serif !important;
         }
     </style>
 """, unsafe_allow_html=True)
@@ -193,43 +187,40 @@ USUARIOS = {
 def mostrar_login():
     st.markdown("""
         <style>
-            .stApp { background: linear-gradient(135deg, #0F1117 0%, #1a1f35 50%, #0F1117 100%) !important; }
+            .stApp { background: linear-gradient(135deg, #F6F7FB 0%, #EEF0FF 100%) !important; }
         </style>
     """, unsafe_allow_html=True)
 
-    st.markdown("<br><br><br>", unsafe_allow_html=True)
+    st.markdown("<br><br><br><br>", unsafe_allow_html=True)
 
     col1, col2, col3 = st.columns([1, 0.55, 1])
     with col2:
         st.markdown("""
             <div style="
-                background: rgba(255,255,255,0.03);
-                border: 1px solid rgba(255,255,255,0.08);
-                border-radius: 20px;
-                padding: 48px 40px;
-                backdrop-filter: blur(20px);
+                background: #FFFFFF;
+                border-radius: 16px;
+                padding: 40px;
+                box-shadow: 0 4px 32px rgba(0,0,0,0.08);
+                border: 1px solid #E6E9EF;
                 text-align: center;
                 margin-bottom: 24px;
             ">
-                "><img src='https://raw.githubusercontent.com/zeltbrajon01-dot/hellyeah-app/master/logo.jpeg' style='width:100%; height:100%; object-fit:cover; border-radius:10px;'></div>
-                <h1 style="
-                    font-family: 'Montserrat', sans-serif;
-                    color: #FFFFFF !important;
-                    font-size: 1.8rem;
-                    font-weight: 800;
-                    margin: 0 0 6px 0;
-                ">HellYeah Agency</h1>
-                <p style="color: #6B7280 !important; font-size: 0.9rem; margin: 0 0 32px 0;">
-                    Panel de administración
+                <img src="https://raw.githubusercontent.com/zeltbrajon01-dot/hellyeah-app/master/logo.jpeg"
+                    style="width:80px; height:80px; object-fit:cover; border-radius:16px; margin-bottom:16px;">
+                <h2 style="color:#323338 !important; font-size:1.4rem; font-weight:700; margin:0 0 6px 0;">
+                    HellYeah Agency
+                </h2>
+                <p style="color:#676879 !important; font-size:0.85rem; margin:0;">
+                    Bienvenido de vuelta
                 </p>
             </div>
         """, unsafe_allow_html=True)
 
-        usuario = st.text_input("", placeholder="👤 Usuario")
-        password = st.text_input("", type="password", placeholder="🔒 Contraseña")
+        usuario = st.text_input("", placeholder="Usuario")
+        password = st.text_input("", type="password", placeholder="Contraseña")
         st.markdown("<br>", unsafe_allow_html=True)
 
-        if st.button("Iniciar sesión →", use_container_width=True):
+        if st.button("Iniciar sesión", use_container_width=True):
             if usuario in USUARIOS and USUARIOS[usuario]["password"] == password:
                 cookies["autenticado"] = "true"
                 cookies["usuario"] = usuario
@@ -245,49 +236,27 @@ autenticado = cookies.get("autenticado") == "true"
 if not autenticado:
     mostrar_login()
 else:
-    st.sidebar.markdown("""
-        <div style="padding: 28px 20px 16px 20px;">
-            <div style="display:flex; align-items:center; gap:10px;">
-                <span style="font-size:1.8rem;">🔥</span>
-                <div>
-                    <div style="font-family:'Montserrat',sans-serif; color:#FFFFFF; font-weight:800; font-size:1.1rem; line-height:1.2;">HellYeah</div>
-                    <div style="color:#6366F1; font-size:0.75rem; font-weight:600; letter-spacing:1px;">AGENCY CRM</div>
-                </div>
-            </div>
-        </div>
-        <div style="height:1px; background:linear-gradient(90deg, #6366F1, transparent); margin: 0 20px 20px 20px;"></div>
-    """, unsafe_allow_html=True)
-
     nombre = cookies.get('nombre', '')
     rol = cookies.get('rol', '').upper()
 
-    st.sidebar.markdown(f"""
-        <div style="
-            margin: 0 12px 20px 12px;
-            background: #1E2130;
-            border-radius: 12px;
-            padding: 12px 16px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        ">
-            <div style="
-                width: 38px; height: 38px;
-                background: linear-gradient(135deg, #6366F1, #8B5CF6);
-                border-radius: 50%;
-                display: flex; align-items: center; justify-content: center;
-                font-size: 1rem;
-                flex-shrink: 0;
-            ">👤</div>
-            <div>
-                <div style="color:#FFFFFF; font-weight:600; font-size:0.85rem;">{nombre}</div>
-                <div style="color:#6366F1; font-size:0.7rem; font-weight:600;">{rol}</div>
+    st.sidebar.markdown("""
+        <div style="padding:20px 16px 8px 16px;">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:16px;">
+                <img src="https://raw.githubusercontent.com/zeltbrajon01-dot/hellyeah-app/master/logo.jpeg"
+                    style="width:36px; height:36px; object-fit:cover; border-radius:8px; flex-shrink:0;">
+                <div>
+                    <div style="color:#323338 !important; font-weight:700; font-size:0.95rem;">HellYeah</div>
+                    <div style="color:#676879 !important; font-size:0.65rem; font-weight:600; letter-spacing:1px; text-transform:uppercase;">Agency CRM</div>
+                </div>
             </div>
         </div>
-        <div style="padding: 0 12px; margin-bottom: 8px;">
-            <div style="color:#6B7280; font-size:0.7rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; padding: 0 8px; margin-bottom: 8px;">MENÚ PRINCIPAL</div>
-        </div>
+        <hr style="border:none; border-top:1px solid #E6E9EF; margin:0 16px 12px 16px;">
     """, unsafe_allow_html=True)
+
+    st.sidebar.markdown(f"👤 **{nombre}**")
+    st.sidebar.markdown(f"<span style='color:#4353FF; font-size:0.75rem; font-weight:600;'>{rol}</span>", unsafe_allow_html=True)
+    st.sidebar.markdown("<hr style='border:none; border-top:1px solid #E6E9EF;'>", unsafe_allow_html=True)
+    st.sidebar.markdown("<p style='color:#AAAAAA; font-size:0.65rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; padding:0 8px;'>MENÚ</p>", unsafe_allow_html=True)
 
     menu = st.sidebar.radio("", [
         "📊  Panel de control",
@@ -296,8 +265,8 @@ else:
         "💰  Pagos"
     ])
 
-    st.sidebar.markdown("<br>" * 8, unsafe_allow_html=True)
-    st.sidebar.markdown("<div style='height:1px; background:#1E2130; margin: 0 12px 16px 12px;'></div>", unsafe_allow_html=True)
+    st.sidebar.markdown("<br>" * 10, unsafe_allow_html=True)
+    st.sidebar.markdown("<hr style='border:none; border-top:1px solid #E6E9EF;'>", unsafe_allow_html=True)
 
     if st.sidebar.button("🚪  Cerrar Sesión", use_container_width=True):
         cookies["autenticado"] = "false"
