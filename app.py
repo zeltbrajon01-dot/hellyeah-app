@@ -158,7 +158,17 @@ st.markdown("""
             border-top: none !important;
             border-radius: 0 0 10px 10px !important;
         }
+[title] {
+            pointer-events: none !important;
+        }
 
+        [data-testid="stSidebar"] [title] {
+            display: none !important;
+        }
+
+        tooltip, [role="tooltip"] {
+            display: none !important;
+        }
         hr {
             border: none !important;
             border-top: 1px solid #E6E9EF !important;
