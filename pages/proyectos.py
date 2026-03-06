@@ -194,4 +194,4 @@ def mostrar_proyectos():
                         "presupuesto": presupuesto
                     }).execute()
                     st.success(f"✅ Proyecto '{nombre_proy}' creado correctamente.")
-                    st.balloons()
+                    st.toast("✅ Proyecto creado correctamente")

@@ -113,4 +113,4 @@ def mostrar_clientes():
                     "fecha_registro": str(fecha_registro)
                 }).execute()
                 st.success(f"✅ Cliente '{nombre}' agregado correctamente.")
-                st.balloons()
+                st.toast("✅ Cliente guardado correctamente")

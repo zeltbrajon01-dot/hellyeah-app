@@ -174,4 +174,4 @@ def mostrar_pagos():
                         "fecha_pago": str(fecha_pago)
                     }).execute()
                     st.success("✅ Pago registrado correctamente.")
-                    st.balloons()
+                    st.toast("✅ Cliente guardado correctamente")
