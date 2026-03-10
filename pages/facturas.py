@@ -97,7 +97,7 @@ def mostrar_facturas():
                             file_options={"content-type": "application/pdf"}
                         )
 
-                        url = sb.storage.from_("facturas").get_public_url(nombre_archivo)
+                        url = f"https://cgrfatasgupmgshjgtqj.supabase.co/storage/v1/object/public/Facturas/{nombre_archivo}"
 
                         sb.table("facturas").insert({
                             "cliente_id": cliente_opciones[cliente_sel],
