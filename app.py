@@ -3,6 +3,7 @@ from pages import clientes
 from pages import proyectos
 from pages import pagos
 from pages import dashboard
+from pages import facturas
 from streamlit_cookies_manager import EncryptedCookieManager
 
 st.set_page_config(
@@ -262,10 +263,11 @@ else:
         "📊  Panel de control",
         "👥  Clientes",
         "📁  Proyectos",
-        "💰  Pagos"
+        "💰  Pagos",
+        "🧾  Facturas"
     ])
 
-    st.sidebar.markdown("<br>" * 10, unsafe_allow_html=True)
+    st.sidebar.markdown("<br>" * 8, unsafe_allow_html=True)
     st.sidebar.markdown("<hr style='border:none; border-top:1px solid #E6E9EF;'>", unsafe_allow_html=True)
 
     if st.sidebar.button("🚪  Cerrar Sesión", use_container_width=True):
@@ -284,3 +286,5 @@ else:
         proyectos.mostrar_proyectos()
     elif "Pagos" in menu:
         pagos.mostrar_pagos()
+    elif "Facturas" in menu:
+        facturas.mostrar_facturas()
