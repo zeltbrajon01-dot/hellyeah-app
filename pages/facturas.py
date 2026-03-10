@@ -91,7 +91,7 @@ def mostrar_facturas():
                         nombre_archivo = f"{cliente_opciones[cliente_sel]}_{fecha_emision}_{archivo.name}"
                         contenido = archivo.read()
 
-                        sb.storage.from_("facturas").upload(
+                        sb.storage.from_("Facturas").upload(
                             path=nombre_archivo,
                             file=contenido,
                             file_options={"content-type": "application/pdf"}
