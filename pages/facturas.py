@@ -51,7 +51,7 @@ def mostrar_facturas():
                         if st.button("🗑️ Eliminar", key=f"del_factura_{factura['id']}"):
                             try:
                                 nombre_archivo = factura["nombre_archivo"]
-                                sb.storage.from_("facturas").remove([nombre_archivo])
+                                sb.storage.from_("Facturas").remove([nombre_archivo])
                             except:
                                 pass
                             sb.table("facturas").delete().eq("id", factura["id"]).execute()
