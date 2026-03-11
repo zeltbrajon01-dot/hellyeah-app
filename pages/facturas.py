@@ -1,6 +1,7 @@
 import streamlit as st
 from config import get_supabase
 from datetime import date
+import re
 
 def mostrar_facturas():
     st.markdown("""
@@ -50,8 +51,7 @@ def mostrar_facturas():
                     with col_b:
                         if st.button("🗑️ Eliminar", key=f"del_factura_{factura['id']}"):
                             try:
-                                nombre_archivo = factura["nombre_archivo"]
-                                sb.storage.from_("Facturas").remove([nombre_archivo])
+                                sb.storage.from_("Facturas").remove([factura["nombre_archivo"]])
                             except:
                                 pass
                             sb.table("facturas").delete().eq("id", factura["id"]).execute()
@@ -88,7 +88,8 @@ def mostrar_facturas():
                     st.error("⚠️ El concepto y el PDF son obligatorios.")
                 else:
                     try:
-                        nombre_archivo = f"{cliente_opciones[cliente_sel]}_{fecha_emision}_{archivo.name}"
+                        nombre_limpio = re.sub(r'[^a-zA-Z0-9._-]', '_', archivo.name)
+                        nombre_archivo = f"{cliente_opciones[cliente_sel]}_{fecha_emision}_{nombre_limpio}"
                         contenido = archivo.read()
 
                         sb.storage.from_("Facturas").upload(
