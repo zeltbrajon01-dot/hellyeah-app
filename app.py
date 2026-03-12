@@ -23,17 +23,19 @@ st.markdown("""
 
         * { font-family: 'Montserrat', sans-serif; }
 
-        .stApp { background: #F6F7FB; }
+        .stApp {
+            background: linear-gradient(135deg, #1a1f35 0%, #0d1117 100%) !important;
+        }
 
         section[data-testid="stSidebar"] {
-            background: #FFFFFF !important;
-            border-right: 1px solid #E6E9EF !important;
-            min-width: 230px !important;
-            max-width: 230px !important;
+            background: linear-gradient(180deg, #0f1623 0%, #0a0f1a 100%) !important;
+            border-right: 1px solid rgba(255,255,255,0.06) !important;
+            min-width: 220px !important;
+            max-width: 220px !important;
         }
 
         section[data-testid="stSidebar"] * {
-            color: #323338 !important;
+            color: #FFFFFF !important;
         }
 
         section[data-testid="stSidebar"] > div {
@@ -46,8 +48,8 @@ st.markdown("""
             background: transparent !important;
             border: none !important;
             border-radius: 8px !important;
-            padding: 9px 14px !important;
-            color: #676879 !important;
+            padding: 10px 14px !important;
+            color: rgba(255,255,255,0.6) !important;
             font-weight: 500 !important;
             font-size: 0.84rem !important;
             transition: all 0.15s ease !important;
@@ -55,12 +57,12 @@ st.markdown("""
         }
 
         .stRadio > div > label:hover {
-            background: #F0F0F5 !important;
-            color: #323338 !important;
+            background: rgba(255,255,255,0.07) !important;
+            color: #FFFFFF !important;
         }
 
         .stButton > button {
-            background: #4353FF !important;
+            background: linear-gradient(135deg, #2563EB, #1d4ed8) !important;
             color: #FFFFFF !important;
             font-weight: 600 !important;
             border: none !important;
@@ -72,18 +74,18 @@ st.markdown("""
         }
 
         .stButton > button:hover {
-            background: #3342CC !important;
-            box-shadow: 0 4px 12px rgba(67,83,255,0.3) !important;
+            background: linear-gradient(135deg, #1d4ed8, #1e40af) !important;
+            box-shadow: 0 4px 15px rgba(37,99,235,0.4) !important;
             transform: translateY(-1px) !important;
         }
 
         .stTextInput > div > div > input,
         .stTextArea > div > div > textarea,
         .stNumberInput > div > div > input {
-            background: #FFFFFF !important;
-            border: 1px solid #C5C7D4 !important;
+            background: rgba(255,255,255,0.05) !important;
+            border: 1px solid rgba(255,255,255,0.1) !important;
             border-radius: 8px !important;
-            color: #323338 !important;
+            color: #FFFFFF !important;
             font-family: 'Montserrat', sans-serif !important;
             font-size: 0.85rem !important;
             padding: 9px 12px !important;
@@ -91,20 +93,25 @@ st.markdown("""
 
         .stTextInput > div > div > input:focus,
         .stTextArea > div > div > textarea:focus {
-            border-color: #4353FF !important;
-            box-shadow: 0 0 0 2px rgba(67,83,255,0.15) !important;
+            border-color: #2563EB !important;
+            box-shadow: 0 0 0 2px rgba(37,99,235,0.25) !important;
+        }
+
+        .stTextInput > div > div > input::placeholder,
+        .stTextArea > div > div > textarea::placeholder {
+            color: rgba(255,255,255,0.3) !important;
         }
 
         .stSelectbox > div > div {
-            background: #FFFFFF !important;
-            border: 1px solid #C5C7D4 !important;
+            background: rgba(255,255,255,0.05) !important;
+            border: 1px solid rgba(255,255,255,0.1) !important;
             border-radius: 8px !important;
-            color: #323338 !important;
+            color: #FFFFFF !important;
         }
 
         .stTabs [data-baseweb="tab-list"] {
             background: transparent !important;
-            border-bottom: 2px solid #E6E9EF !important;
+            border-bottom: 1px solid rgba(255,255,255,0.1) !important;
             border-radius: 0 !important;
             padding: 0 !important;
             gap: 0 !important;
@@ -113,39 +120,43 @@ st.markdown("""
         .stTabs [data-baseweb="tab"] {
             background: transparent !important;
             border-radius: 0 !important;
-            color: #676879 !important;
+            color: rgba(255,255,255,0.5) !important;
             font-weight: 600 !important;
             font-size: 0.85rem !important;
             padding: 10px 20px !important;
             border-bottom: 2px solid transparent !important;
-            margin-bottom: -2px !important;
+            margin-bottom: -1px !important;
         }
 
         .stTabs [aria-selected="true"] {
             background: transparent !important;
-            color: #4353FF !important;
-            border-bottom: 2px solid #4353FF !important;
+            color: #FFFFFF !important;
+            border-bottom: 2px solid #2563EB !important;
         }
 
         .streamlit-expanderHeader {
-            background: #FFFFFF !important;
-            border: 1px solid #E6E9EF !important;
+            background: rgba(255,255,255,0.04) !important;
+            border: 1px solid rgba(255,255,255,0.08) !important;
             border-radius: 10px !important;
-            color: #323338 !important;
+            color: #FFFFFF !important;
             font-weight: 600 !important;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.05) !important;
         }
 
         .streamlit-expanderContent {
-            background: #FAFBFF !important;
-            border: 1px solid #E6E9EF !important;
+            background: rgba(255,255,255,0.02) !important;
+            border: 1px solid rgba(255,255,255,0.08) !important;
             border-top: none !important;
             border-radius: 0 0 10px 10px !important;
         }
 
+        [data-testid="stExpander"] {
+            border: 1px solid rgba(255,255,255,0.08) !important;
+            border-radius: 10px !important;
+        }
+
         hr {
             border: none !important;
-            border-top: 1px solid #E6E9EF !important;
+            border-top: 1px solid rgba(255,255,255,0.08) !important;
         }
 
         .block-container {
@@ -157,14 +168,31 @@ st.markdown("""
 
         h1, h2, h3, h4 {
             font-family: 'Montserrat', sans-serif !important;
-            color: #323338 !important;
+            color: #FFFFFF !important;
             font-weight: 700 !important;
             letter-spacing: -0.3px !important;
         }
 
         p, span, div, label {
-            color: #323338 !important;
+            color: rgba(255,255,255,0.85) !important;
             font-family: 'Montserrat', sans-serif !important;
+        }
+
+        .stMarkdown p {
+            color: rgba(255,255,255,0.6) !important;
+        }
+
+        div[data-testid="stDateInput"] input {
+            background: rgba(255,255,255,0.05) !important;
+            border: 1px solid rgba(255,255,255,0.1) !important;
+            color: #FFFFFF !important;
+            border-radius: 8px !important;
+        }
+
+        .stAlert {
+            background: rgba(255,255,255,0.05) !important;
+            border: 1px solid rgba(255,255,255,0.1) !important;
+            border-radius: 8px !important;
         }
     </style>
 """, unsafe_allow_html=True)
@@ -188,7 +216,9 @@ USUARIOS = {
 def mostrar_login():
     st.markdown("""
         <style>
-            .stApp { background: linear-gradient(135deg, #F6F7FB 0%, #EEF0FF 100%) !important; }
+            .stApp {
+                background: linear-gradient(135deg, #0f1623 0%, #1a2744 50%, #0f1623 100%) !important;
+            }
         </style>
     """, unsafe_allow_html=True)
 
@@ -198,20 +228,21 @@ def mostrar_login():
     with col2:
         st.markdown("""
             <div style="
-                background: #FFFFFF;
+                background: rgba(255,255,255,0.04);
                 border-radius: 16px;
                 padding: 40px;
-                box-shadow: 0 4px 32px rgba(0,0,0,0.08);
-                border: 1px solid #E6E9EF;
+                box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+                border: 1px solid rgba(255,255,255,0.08);
                 text-align: center;
                 margin-bottom: 24px;
+                backdrop-filter: blur(20px);
             ">
                 <img src="https://raw.githubusercontent.com/zeltbrajon01-dot/hellyeah-app/master/logo.jpeg"
                     style="width:80px; height:80px; object-fit:cover; border-radius:16px; margin-bottom:16px;">
-                <h2 style="color:#323338 !important; font-size:1.4rem; font-weight:700; margin:0 0 6px 0;">
+                <h2 style="color:#FFFFFF !important; font-size:1.4rem; font-weight:700; margin:0 0 6px 0;">
                     HellYeah Agency
                 </h2>
-                <p style="color:#676879 !important; font-size:0.85rem; margin:0;">
+                <p style="color:rgba(255,255,255,0.5) !important; font-size:0.85rem; margin:0;">
                     Bienvenido de vuelta
                 </p>
             </div>
@@ -246,18 +277,18 @@ else:
                 <img src="https://raw.githubusercontent.com/zeltbrajon01-dot/hellyeah-app/master/logo.jpeg"
                     style="width:36px; height:36px; object-fit:cover; border-radius:8px; flex-shrink:0;">
                 <div>
-                    <div style="color:#323338 !important; font-weight:700; font-size:0.95rem;">HellYeah</div>
-                    <div style="color:#676879 !important; font-size:0.65rem; font-weight:600; letter-spacing:1px; text-transform:uppercase;">Agency CRM</div>
+                    <div style="color:#FFFFFF !important; font-weight:700; font-size:0.95rem;">HellYeah</div>
+                    <div style="color:rgba(255,255,255,0.4) !important; font-size:0.65rem; font-weight:600; letter-spacing:1px; text-transform:uppercase;">Agency CRM</div>
                 </div>
             </div>
         </div>
-        <hr style="border:none; border-top:1px solid #E6E9EF; margin:0 16px 12px 16px;">
+        <hr style="border:none; border-top:1px solid rgba(255,255,255,0.08); margin:0 16px 12px 16px;">
     """, unsafe_allow_html=True)
 
     st.sidebar.markdown(f"👤 **{nombre}**")
-    st.sidebar.markdown(f"<span style='color:#4353FF; font-size:0.75rem; font-weight:600;'>{rol}</span>", unsafe_allow_html=True)
-    st.sidebar.markdown("<hr style='border:none; border-top:1px solid #E6E9EF;'>", unsafe_allow_html=True)
-    st.sidebar.markdown("<p style='color:#AAAAAA; font-size:0.65rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; padding:0 8px;'>MENÚ</p>", unsafe_allow_html=True)
+    st.sidebar.markdown(f"<span style='color:#2563EB; font-size:0.75rem; font-weight:600;'>{rol}</span>", unsafe_allow_html=True)
+    st.sidebar.markdown("<hr style='border:none; border-top:1px solid rgba(255,255,255,0.08);'>", unsafe_allow_html=True)
+    st.sidebar.markdown("<p style='color:rgba(255,255,255,0.3); font-size:0.65rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; padding:0 8px;'>MENÚ</p>", unsafe_allow_html=True)
 
     menu = st.sidebar.radio("", [
         "📊  Panel de control",
@@ -268,7 +299,7 @@ else:
     ])
 
     st.sidebar.markdown("<br>" * 8, unsafe_allow_html=True)
-    st.sidebar.markdown("<hr style='border:none; border-top:1px solid #E6E9EF;'>", unsafe_allow_html=True)
+    st.sidebar.markdown("<hr style='border:none; border-top:1px solid rgba(255,255,255,0.08);'>", unsafe_allow_html=True)
 
     if st.sidebar.button("🚪  Cerrar Sesión", use_container_width=True):
         cookies["autenticado"] = "false"
