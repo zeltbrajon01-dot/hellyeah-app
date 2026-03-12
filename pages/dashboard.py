@@ -6,19 +6,19 @@ import plotly.graph_objects as go
 def card_metrica(titulo, valor, icono, color_borde):
     st.markdown(f"""
         <div style="
-            background: #FFFFFF;
+            background: rgba(255,255,255,0.05);
             border-radius: 12px;
             padding: 20px 24px;
-            border: 1px solid #E6E9EF;
+            border: 1px solid rgba(255,255,255,0.08);
             border-top: 3px solid {color_borde};
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
         ">
             <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                 <div>
-                    <div style="color:#676879; font-size:0.75rem; font-weight:600; letter-spacing:0.5px; text-transform:uppercase; margin-bottom:10px;">{titulo}</div>
-                    <div style="color:#323338; font-size:1.8rem; font-weight:700; letter-spacing:-1px;">{valor}</div>
+                    <div style="color:rgba(255,255,255,0.5); font-size:0.75rem; font-weight:600; letter-spacing:0.5px; text-transform:uppercase; margin-bottom:10px;">{titulo}</div>
+                    <div style="color:#FFFFFF; font-size:1.8rem; font-weight:700; letter-spacing:-1px;">{valor}</div>
                 </div>
-                <div style="font-size:1.5rem; opacity:0.7;">{icono}</div>
+                <div style="font-size:1.5rem; opacity:0.8;">{icono}</div>
             </div>
         </div>
     """, unsafe_allow_html=True)
@@ -26,18 +26,12 @@ def card_metrica(titulo, valor, icono, color_borde):
 def mostrar_dashboard():
     st.markdown("""
         <div style="margin-bottom: 8px;">
-            <h1 style="
-                color: #323338;
-                font-size: 1.6rem;
-                font-weight: 700;
-                letter-spacing: -0.3px;
-                margin: 0 0 4px 0;
-            ">Panel de Control</h1>
-            <p style="color: #676879; font-size: 0.85rem; margin: 0;">
+            <h1 style="color:#FFFFFF; font-size:1.6rem; font-weight:700; letter-spacing:-0.3px; margin:0 0 4px 0;">Panel de Control</h1>
+            <p style="color:rgba(255,255,255,0.5); font-size:0.85rem; margin:0;">
                 Bienvenido de vuelta — aquí está tu resumen de hoy
             </p>
         </div>
-        <hr style="border:none; border-top:1px solid #E6E9EF; margin: 20px 0 28px 0;">
+        <hr style="border:none; border-top:1px solid rgba(255,255,255,0.08); margin:20px 0 28px 0;">
     """, unsafe_allow_html=True)
 
     sb = get_supabase()
@@ -57,11 +51,11 @@ def mostrar_dashboard():
     pagos_vencidos = sb.table("pagos").select("monto").eq("estado", "Vencido").execute().data
     total_vencido = sum([p["monto"] for p in pagos_vencidos]) if pagos_vencidos else 0
 
-    st.markdown("<p style='color:#323338; font-size:0.8rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:12px;'>RESUMEN GENERAL</p>", unsafe_allow_html=True)
+    st.markdown("<p style='color:rgba(255,255,255,0.4); font-size:0.8rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:12px;'>RESUMEN GENERAL</p>", unsafe_allow_html=True)
 
     col1, col2, col3, col4 = st.columns(4)
     with col1:
-        card_metrica("Clientes", total_clientes, "👥", "#4353FF")
+        card_metrica("Clientes", total_clientes, "👥", "#2563EB")
     with col2:
         card_metrica("Proyectos", total_proyectos, "📁", "#6B5BFF")
     with col3:
@@ -70,7 +64,7 @@ def mostrar_dashboard():
         card_metrica("Tareas pendientes", tareas_pendientes, "⚡", "#FFCB00")
 
     st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown("<p style='color:#323338; font-size:0.8rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:12px;'>RESUMEN FINANCIERO</p>", unsafe_allow_html=True)
+    st.markdown("<p style='color:rgba(255,255,255,0.4); font-size:0.8rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:12px;'>RESUMEN FINANCIERO</p>", unsafe_allow_html=True)
 
     col1, col2, col3 = st.columns(3)
     with col1:
@@ -81,14 +75,14 @@ def mostrar_dashboard():
         card_metrica("Vencido", f"${total_vencido:,.2f}", "🚨", "#E2445C")
 
     st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown("<hr style='border:none; border-top:1px solid #E6E9EF;'>", unsafe_allow_html=True)
+    st.markdown("<hr style='border:none; border-top:1px solid rgba(255,255,255,0.08);'>", unsafe_allow_html=True)
 
     col_izq, col_der = st.columns(2)
 
     with col_izq:
         st.markdown("""
-            <div style="background:#FFFFFF; border-radius:12px; padding:20px 24px; border:1px solid #E6E9EF; box-shadow:0 2px 8px rgba(0,0,0,0.04); margin-bottom:16px;">
-                <p style="color:#323338; font-size:0.8rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin:0 0 16px 0;">ESTADO DE PROYECTOS</p>
+            <div style="background:rgba(255,255,255,0.04); border-radius:12px; padding:20px 24px; border:1px solid rgba(255,255,255,0.08); margin-bottom:16px;">
+                <p style="color:rgba(255,255,255,0.4); font-size:0.8rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin:0 0 16px 0;">ESTADO DE PROYECTOS</p>
         """, unsafe_allow_html=True)
 
         proyectos_data = sb.table("proyectos").select("estado").execute().data
@@ -101,19 +95,19 @@ def mostrar_dashboard():
                 values=df_count["cantidad"],
                 hole=0.65,
                 marker=dict(
-                    colors=["#4353FF", "#00C875", "#FFCB00", "#E2445C"],
-                    line=dict(color="#FFFFFF", width=2)
+                    colors=["#2563EB", "#00C875", "#FFCB00", "#E2445C"],
+                    line=dict(color="rgba(255,255,255,0.1)", width=2)
                 ),
                 textinfo="label+percent",
-                textfont=dict(size=11, color="#323338"),
+                textfont=dict(size=11, color="#FFFFFF"),
             )])
             fig.update_layout(
                 paper_bgcolor="rgba(0,0,0,0)",
                 plot_bgcolor="rgba(0,0,0,0)",
-                font=dict(color="#323338", family="Montserrat"),
+                font=dict(color="#FFFFFF", family="Montserrat"),
                 showlegend=True,
                 legend=dict(
-                    font=dict(size=11, color="#676879"),
+                    font=dict(size=11, color="rgba(255,255,255,0.6)"),
                     bgcolor="rgba(0,0,0,0)"
                 ),
                 margin=dict(t=10, b=10, l=10, r=10),
@@ -127,8 +121,8 @@ def mostrar_dashboard():
 
     with col_der:
         st.markdown("""
-            <div style="background:#FFFFFF; border-radius:12px; padding:20px 24px; border:1px solid #E6E9EF; box-shadow:0 2px 8px rgba(0,0,0,0.04); margin-bottom:16px;">
-                <p style="color:#323338; font-size:0.8rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin:0 0 16px 0;">INGRESOS POR ESTADO</p>
+            <div style="background:rgba(255,255,255,0.04); border-radius:12px; padding:20px 24px; border:1px solid rgba(255,255,255,0.08); margin-bottom:16px;">
+                <p style="color:rgba(255,255,255,0.4); font-size:0.8rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin:0 0 16px 0;">INGRESOS POR ESTADO</p>
         """, unsafe_allow_html=True)
 
         pagos_data = sb.table("pagos").select("estado, monto").execute().data
@@ -143,18 +137,18 @@ def mostrar_dashboard():
                     x=[row["estado"]],
                     y=[row["monto"]],
                     marker=dict(
-                        color=colores.get(row["estado"], "#4353FF"),
-                        line=dict(color="#FFFFFF", width=0)
+                        color=colores.get(row["estado"], "#2563EB"),
+                        line=dict(color="rgba(0,0,0,0)", width=0)
                     ),
                     text=f"${row['monto']:,.0f}",
                     textposition="outside",
-                    textfont=dict(color="#323338", size=11),
+                    textfont=dict(color="#FFFFFF", size=11),
                 ))
             fig2.update_layout(
                 paper_bgcolor="rgba(0,0,0,0)",
                 plot_bgcolor="rgba(0,0,0,0)",
-                font=dict(color="#323338", family="Montserrat"),
-                xaxis=dict(showgrid=False, title="", color="#676879"),
+                font=dict(color="#FFFFFF", family="Montserrat"),
+                xaxis=dict(showgrid=False, title="", color="rgba(255,255,255,0.5)"),
                 yaxis=dict(showgrid=False, showticklabels=False),
                 showlegend=False,
                 bargap=0.5,
@@ -167,8 +161,8 @@ def mostrar_dashboard():
 
         st.markdown("</div>", unsafe_allow_html=True)
 
-    st.markdown("<hr style='border:none; border-top:1px solid #E6E9EF;'>", unsafe_allow_html=True)
-    st.markdown("<p style='color:#323338; font-size:0.8rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:12px;'>PROGRESO DE TAREAS</p>", unsafe_allow_html=True)
+    st.markdown("<hr style='border:none; border-top:1px solid rgba(255,255,255,0.08);'>", unsafe_allow_html=True)
+    st.markdown("<p style='color:rgba(255,255,255,0.4); font-size:0.8rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:12px;'>PROGRESO DE TAREAS</p>", unsafe_allow_html=True)
 
     total_tareas = tareas_pendientes + tareas_completadas
     if total_tareas > 0:
@@ -176,12 +170,12 @@ def mostrar_dashboard():
         col1, col2 = st.columns([5, 1])
         with col1:
             st.markdown(f"""
-                <div style="background:#F6F7FB; border-radius:100px; height:10px; overflow:hidden; margin-top:12px;">
-                    <div style="background:linear-gradient(90deg, #4353FF, #6B5BFF); width:{porcentaje}%; height:100%; border-radius:100px;"></div>
+                <div style="background:rgba(255,255,255,0.08); border-radius:100px; height:10px; overflow:hidden; margin-top:12px;">
+                    <div style="background:linear-gradient(90deg, #2563EB, #6B5BFF); width:{porcentaje}%; height:100%; border-radius:100px;"></div>
                 </div>
             """, unsafe_allow_html=True)
         with col2:
-            st.markdown(f"<p style='color:#4353FF; font-weight:700; font-size:0.9rem; margin-top:6px;'>{porcentaje}%</p>", unsafe_allow_html=True)
-        st.markdown(f"<p style='color:#676879; font-size:0.8rem; margin-top:8px;'>{tareas_completadas} de {total_tareas} tareas completadas</p>", unsafe_allow_html=True)
+            st.markdown(f"<p style='color:#2563EB; font-weight:700; font-size:0.9rem; margin-top:6px;'>{porcentaje}%</p>", unsafe_allow_html=True)
+        st.markdown(f"<p style='color:rgba(255,255,255,0.4); font-size:0.8rem; margin-top:8px;'>{tareas_completadas} de {total_tareas} tareas completadas</p>", unsafe_allow_html=True)
     else:
         st.info("No hay tareas registradas todavía.")
